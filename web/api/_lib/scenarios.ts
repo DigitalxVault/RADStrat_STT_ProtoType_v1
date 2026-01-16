@@ -1,9 +1,14 @@
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import type { ScenarioV2, ScenarioTreeNode, ScenariosV2Data, Role } from './types';
 
-// Read JSON using fs - path relative to project root in Vercel
-const jsonPath = join(process.cwd(), 'api', '_lib', 'scenarios_v2.json');
+// Get __dirname equivalent in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Read JSON from same directory as this file
+const jsonPath = join(__dirname, 'scenarios_v2.json');
 const scenariosV2Data = JSON.parse(readFileSync(jsonPath, 'utf-8'));
 const data = scenariosV2Data as ScenariosV2Data;
 
