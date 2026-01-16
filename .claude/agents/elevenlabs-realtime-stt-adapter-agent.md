@@ -1,4 +1,4 @@
---- 
+---
 name: ElevenLabs Realtime STT Adapter Agent
 description: Use this agent when connecting to ElevenLabs Realtime, streaming audio, handling statuses, and finalization. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

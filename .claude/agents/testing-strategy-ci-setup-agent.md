@@ -1,4 +1,4 @@
---- 
+---
 name: Testing Strategy & CI Setup Agent
 description: Use this agent when planning and implementing unit/integration checks and acceptance checklist. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

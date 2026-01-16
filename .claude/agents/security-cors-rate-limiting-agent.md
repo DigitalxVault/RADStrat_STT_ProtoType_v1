@@ -1,4 +1,4 @@
---- 
+---
 name: Security, CORS & Rate Limiting Agent
 description: Use this agent when hardening the server, protecting secrets, and constraining origins and rates. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

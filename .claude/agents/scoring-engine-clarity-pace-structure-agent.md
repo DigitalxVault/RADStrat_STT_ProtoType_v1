@@ -1,4 +1,4 @@
---- 
+---
 name: Scoring Engine (Clarity, Pace, Structure) Agent
 description: Use this agent when computing clarity/pace/structure scores deterministically and overall weighting. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

@@ -1,4 +1,4 @@
---- 
+---
 name: Question Bank Loader & Schema Validation Agent
 description: Use this agent when loading/validating question JSON and exposing to UI. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

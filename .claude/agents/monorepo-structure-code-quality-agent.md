@@ -1,4 +1,4 @@
---- 
+---
 name: Monorepo Structure & Code Quality Agent
 description: Use this agent when enforcing folder layout, lint/format rules, and PR quality gates. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

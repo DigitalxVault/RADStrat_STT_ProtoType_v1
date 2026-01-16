@@ -1,4 +1,4 @@
---- 
+---
 name: Error Handling & Timeout Management Agent
 description: Use this agent when graceful UI/server error states, finalization timeouts, and retries. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

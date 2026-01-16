@@ -1,4 +1,4 @@
---- 
+---
 name: Audio Chunking & Realtime Transport Agent
 description: Use this agent when segmenting audio and delivering frames to providers with backpressure handling. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

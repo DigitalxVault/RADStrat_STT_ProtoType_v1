@@ -1,4 +1,4 @@
---- 
+---
 name: Build, Packaging & Local Run Agent
 description: Use this agent when producing dev/build/start workflows and .env.example guidance. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

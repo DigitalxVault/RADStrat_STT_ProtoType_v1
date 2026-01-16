@@ -1,4 +1,4 @@
---- 
+---
 name: Realtime Proxy & WebSocket Bridge Agent
 description: Use this agent when bridging browser to providers when REALTIME_MODE=proxy. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

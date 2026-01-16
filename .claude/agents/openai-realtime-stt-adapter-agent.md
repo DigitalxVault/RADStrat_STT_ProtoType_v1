@@ -1,4 +1,4 @@
---- 
+---
 name: OpenAI Realtime STT Adapter Agent
 description: Use this agent when connecting to OpenAI Realtime, handling interim/final transcripts, tokens, and timeouts. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

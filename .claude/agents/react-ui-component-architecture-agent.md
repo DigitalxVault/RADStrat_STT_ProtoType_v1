@@ -1,4 +1,4 @@
---- 
+---
 name: React UI & Component Architecture Agent
 description: Use this agent when designing App.tsx layout and reusable components (Panels, Controls, ScoreBreakdown) following Vite + TS. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

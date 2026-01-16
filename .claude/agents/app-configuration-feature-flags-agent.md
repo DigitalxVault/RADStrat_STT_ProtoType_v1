@@ -1,4 +1,4 @@
---- 
+---
 name: App Configuration & Feature Flags Agent
 description: Use this agent when managing non-secret config (APP_CONFIG) and feature flags. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

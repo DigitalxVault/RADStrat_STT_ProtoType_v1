@@ -1,4 +1,4 @@
---- 
+---
 name: UX Flow & Interaction Design Agent
 description: Use this agent when defining single-screen flows, states, and micro-interactions for Talk/End and realtime feedback. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 

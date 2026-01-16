@@ -1,4 +1,4 @@
---- 
+---
 name: Logging, Metrics & Local Monitoring Agent
 description: Use this agent when capturing provider latency, connection events, and local logs. It operates autonomously, collaborates in parallel/async with other agents, and reports implementation status to the Dev Lead. Examples:
 
