@@ -1,0 +1,1301 @@
+{
+  "pack_name": "RADStrat RT Training Pack (Aligned) — training_scenarios + GDD reference",
+  "sources": {
+    "rt_rules_md": "RADStrat_RT_Rules.md",
+    "training_scenarios_json": "training_scenarios.json",
+    "gdd_docx": "RADStrat GDD (1).docx"
+  },
+  "callsign_aliases": {
+    "SHEPHERD": "SHEPHARD",
+    "SPARTAN": "SPARTAN 1"
+  },
+  "role_quick_ref": {
+    "SHEPHARD": "Ground Controller / Net Control",
+    "SPARTAN 1": "Incident Commander",
+    "TENDER X": "Fire / Rescue",
+    "REDCROSS X": "Aircraft Emergency Ambulance",
+    "BLUECROSS X": "Domestic Ambulance",
+    "LOGIC X": "Security Trooper",
+    "STALKER X": "Airfield / Maintenance",
+    "SAFETY VEHICLE 1": "Safety Escort / Movement Control"
+  },
+  "training": {
+    "role_quick_ref": {
+      "SHEPHARD": "Ground Controller / Net Control",
+      "SPARTAN 1": "Incident Commander",
+      "TENDER X": "Fire / Rescue",
+      "REDCROSS X": "Aircraft Emergency Ambulance",
+      "BLUECROSS X": "Domestic Ambulance",
+      "LOGIC X": "Security Trooper",
+      "STALKER X": "Airfield / Maintenance",
+      "SAFETY VEHICLE 1": "Safety Escort / Movement Control"
+    },
+    "series": [
+      {
+        "series_id": "redcross",
+        "series_name": "REDCROSS SERIES",
+        "category": "Aircraft Emergencies",
+        "scenario_count": 5,
+        "scenarios": [
+          {
+            "scenario_id": "redcross_1",
+            "title": "Aircraft crash (Fuel Area)",
+            "objectives": [
+              "Medical response",
+              "cordon",
+              "fire cover",
+              "controlled routes"
+            ],
+            "transmissions": [
+              {
+                "from": "SPARTAN 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SPARTAN 1, at Command Post, aircraft crash reported at Fuel Area, activate emergency plan, restrict movements adjacent Fuel Area.",
+                "message_raw": "aircraft crash reported at Fuel Area, activate emergency plan, restrict movements adjacent Fuel Area."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, SHEPHARD, restriction active, responders will be routed via Service Road ONE, report if additional closures required.",
+                "message_raw": "restriction active, responders will be routed via Service Road ONE, report if additional closures required."
+              },
+              {
+                "from": "REDCROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 1, at Medical Bay, request clearance to proceed via Service Road ONE and cross Taxiway ALPHA to Fuel Area for aircraft crash response.",
+                "message_raw": "at Medical Bay, request clearance to proceed via Service Road ONE and cross Taxiway ALPHA to Fuel Area for aircraft crash response."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 1",
+                "message": "REDCROSS 1, SHEPHARD, proceed via Service Road ONE, hold short of Taxiway ALPHA at holding point, report holding.",
+                "message_raw": "proceed Service Road ONE, hold short Taxiway ALPHA at holding point, report holding."
+              },
+              {
+                "from": "REDCROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 1, holding short of Taxiway ALPHA.",
+                "message_raw": "holding short Taxiway ALPHA."
+              },
+              {
+                "from": "TENDER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, TENDER 1, at AES Station, request clearance to proceed to Fuel Area for fire cover and scene protection.",
+                "message_raw": "at AES Station, request clearance to proceed to Fuel Area for fire cover and scene protection."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "TENDER 1",
+                "message": "TENDER 1, SHEPHARD, proceed via Service Road ONE, hold short of Taxiway ALPHA, report holding.",
+                "message_raw": "proceed Service Road ONE, hold short Taxiway ALPHA, report holding."
+              },
+              {
+                "from": "TENDER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, TENDER 1, holding short of Taxiway ALPHA.",
+                "message_raw": "holding short Taxiway ALPHA."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": [
+                  "REDCROSS 1",
+                  "TENDER 1"
+                ],
+                "message": "REDCROSS 1, TENDER 1, SHEPHARD, at Ground Control, cross Taxiway ALPHA now, expedite, report taxiway vacated.",
+                "message_raw": "cross Taxiway ALPHA now, expedite, report taxiway vacated."
+              },
+              {
+                "from": "REDCROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 1, crossing Taxiway ALPHA now, expediting to Fuel Area, will report vacated.",
+                "message_raw": "crossing Taxiway ALPHA now, expediting to Fuel Area, will report vacated."
+              },
+              {
+                "from": "TENDER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, TENDER 1, crossing Taxiway ALPHA now, expediting to Fuel Area, will report vacated.",
+                "message_raw": "crossing Taxiway ALPHA now, expediting to Fuel Area, will report vacated."
+              },
+              {
+                "from": "LOGIC 1",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 1, cordon established around Fuel Area access, crowd control in place, access restricted to responders only.",
+                "message_raw": "cordon established around Fuel Area access, crowd control in place, access restricted to responders only."
+              },
+              {
+                "from": "REDCROSS 1",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, REDCROSS 1, on-scene Fuel Area, medical assessment ongoing, will report casualty status.",
+                "message_raw": "on-scene Fuel Area, medical assessment ongoing, will report casualty status."
+              },
+              {
+                "from": "TENDER 1",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, TENDER 1, on-scene Fuel Area, fire cover established, standing by.",
+                "message_raw": "on-scene Fuel Area, fire cover established, standing by."
+              }
+            ]
+          },
+          {
+            "scenario_id": "redcross_2",
+            "title": "Aircrew fainted after landing (Hangar THREE / Stand area)",
+            "objectives": [
+              "Rapid medical access",
+              "keep route clear",
+              "control bystanders"
+            ],
+            "transmissions": [
+              {
+                "from": "REDCROSS 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 2, at Station South, request clearance to proceed via Service Road TWO and cross Taxiway BRAVO to Hangar THREE for personnel fainted after landing.",
+                "message_raw": "at Station South, request clearance to proceed via Service Road TWO and cross Taxiway BRAVO to Hangar THREE for personnel fainted after landing."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 2",
+                "message": "REDCROSS 2, SHEPHARD, proceed via Service Road TWO, hold short of Taxiway BRAVO, report holding.",
+                "message_raw": "proceed Service Road TWO, hold short Taxiway BRAVO, report holding."
+              },
+              {
+                "from": "REDCROSS 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 2, holding short of Taxiway BRAVO.",
+                "message_raw": "holding short Taxiway BRAVO."
+              },
+              {
+                "from": "LOGIC 2",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 2, at Security Post, crowd forming at Hangar THREE access, moving personnel back, keeping route open for ambulance.",
+                "message_raw": "crowd forming at Hangar THREE access, moving personnel back, keeping route open for ambulance."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 2",
+                "message": "REDCROSS 2, SHEPHARD, at Ground Control, cross Taxiway BRAVO now, expedite, report taxiway vacated.",
+                "message_raw": "cross Taxiway BRAVO now, expedite, report taxiway vacated."
+              },
+              {
+                "from": "REDCROSS 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 2, crossing Taxiway BRAVO now, expediting to Hangar THREE, will report vacated.",
+                "message_raw": "crossing Taxiway BRAVO now, expediting to Hangar THREE, will report vacated."
+              },
+              {
+                "from": "REDCROSS 2",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, REDCROSS 2, on-scene Hangar THREE, patient conscious, assessment in progress, will advise if hospital transport required.",
+                "message_raw": "on-scene Hangar THREE, patient conscious, assessment in progress, will advise if hospital transport required."
+              },
+              {
+                "from": "SPARTAN 1",
+                "to": "REDCROSS 2",
+                "message": "REDCROSS 2, SPARTAN 1, confirm if additional medical support required, maintain updates.",
+                "message_raw": "confirm if additional medical support required, maintain updates."
+              }
+            ]
+          },
+          {
+            "scenario_id": "redcross_3",
+            "title": "Aircraft explosion (Airfield East)",
+            "objectives": [
+              "Fire cover",
+              "casualty extraction",
+              "cordon",
+              "controlled access"
+            ],
+            "transmissions": [
+              {
+                "from": "SPARTAN 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SPARTAN 1, at Command Post, aircraft explosion reported Airfield East, close affected taxi routes and maintain sterile access for responders.",
+                "message_raw": "aircraft explosion reported Airfield East, close affected taxi routes and maintain sterile access for responders."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, SHEPHARD, at Ground Control, restrictions active Airfield East boundary, routing responders via Perimeter Track.",
+                "message_raw": "restrictions active Airfield East boundary, routing responders via Perimeter Track."
+              },
+              {
+                "from": "TENDER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, TENDER 2, at AES Station, request clearance to proceed via Perimeter Track and cross Taxiway CHARLIE to Airfield East for fire response.",
+                "message_raw": "at AES Station, request clearance to proceed via Perimeter Track and cross Taxiway CHARLIE to Airfield East for fire response."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "TENDER 2",
+                "message": "TENDER 2, SHEPHARD, proceed via Perimeter Track, hold short of Taxiway CHARLIE, report holding.",
+                "message_raw": "proceed Perimeter Track, hold short Taxiway CHARLIE, report holding."
+              },
+              {
+                "from": "TENDER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, TENDER 2, holding short of Taxiway CHARLIE.",
+                "message_raw": "holding short Taxiway CHARLIE."
+              },
+              {
+                "from": "REDCROSS 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 3, at Fire Station area, request clearance to proceed via Perimeter Track and cross Taxiway CHARLIE to Airfield East for casualty response.",
+                "message_raw": "at Fire Station area, request clearance to proceed via Perimeter Track and cross Taxiway CHARLIE to Airfield East for casualty response."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 3",
+                "message": "REDCROSS 3, SHEPHARD, proceed via Perimeter Track, hold short of Taxiway CHARLIE, report holding.",
+                "message_raw": "proceed Perimeter Track, hold short Taxiway CHARLIE, report holding."
+              },
+              {
+                "from": "REDCROSS 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 3, holding short of Taxiway CHARLIE.",
+                "message_raw": "holding short Taxiway CHARLIE."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": [
+                  "TENDER 2",
+                  "REDCROSS 3"
+                ],
+                "message": "TENDER 2, REDCROSS 3, SHEPHARD, at Ground Control, cross Taxiway CHARLIE now, expedite, report taxiway vacated.",
+                "message_raw": "cross Taxiway CHARLIE now, expedite, report taxiway vacated."
+              },
+              {
+                "from": "TENDER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, TENDER 2, crossing Taxiway CHARLIE now, expediting to Airfield East, will report vacated.",
+                "message_raw": "crossing Taxiway CHARLIE now, expediting to Airfield East, will report vacated."
+              },
+              {
+                "from": "REDCROSS 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 3, crossing Taxiway CHARLIE now, expediting to Airfield East, will report vacated.",
+                "message_raw": "crossing Taxiway CHARLIE now, expediting to Airfield East, will report vacated."
+              },
+              {
+                "from": "LOGIC 3",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 3, cordon established Airfield East, access restricted, perimeter secured.",
+                "message_raw": "cordon established Airfield East, access restricted, perimeter secured."
+              },
+              {
+                "from": "TENDER 2",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, TENDER 2, on-scene Airfield East, fire cover established, scene risk managed, standing by.",
+                "message_raw": "on-scene Airfield East, fire cover established, scene risk managed, standing by."
+              },
+              {
+                "from": "REDCROSS 3",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, REDCROSS 3, on-scene Airfield East, medical response in progress, will report evacuation.",
+                "message_raw": "on-scene Airfield East, medical response in progress, will report evacuation."
+              }
+            ]
+          },
+          {
+            "scenario_id": "redcross_4",
+            "title": "Aircraft vehicle collision (Perimeter Road)",
+            "objectives": [
+              "Medical response",
+              "traffic control",
+              "debris clearance"
+            ],
+            "transmissions": [
+              {
+                "from": "REDCROSS 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 4, at Gate BRAVO, request clearance to proceed via Service Road ONE and cross Taxiway DELTA to Perimeter Road for vehicle collision.",
+                "message_raw": "at Gate BRAVO, request clearance to proceed via Service Road ONE and cross Taxiway DELTA to Perimeter Road for vehicle collision."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 4",
+                "message": "REDCROSS 4, SHEPHARD, proceed via Service Road ONE, hold short of Taxiway DELTA, report holding.",
+                "message_raw": "proceed Service Road ONE, hold short Taxiway DELTA, report holding."
+              },
+              {
+                "from": "REDCROSS 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 4, holding short of Taxiway DELTA.",
+                "message_raw": "holding short Taxiway DELTA."
+              },
+              {
+                "from": "LOGIC 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 4, at Perimeter Road, collision scene secured, traffic stopped, request ambulance access lane maintained.",
+                "message_raw": "at Perimeter Road, collision scene secured, traffic stopped, request ambulance access lane maintained."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 4",
+                "message": "REDCROSS 4, SHEPHARD, at Ground Control, cross Taxiway DELTA now, expedite, report taxiway vacated.",
+                "message_raw": "cross Taxiway DELTA now, expedite, report taxiway vacated."
+              },
+              {
+                "from": "REDCROSS 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 4, crossing Taxiway DELTA now, expediting to Perimeter Road, will report vacated.",
+                "message_raw": "crossing Taxiway DELTA now, expediting to Perimeter Road, will report vacated."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "LOGIC 4",
+                "message": "LOGIC 4, STALKER 1, at Maintenance Depot, debris clearance team enroute, will coordinate safe access once ambulance completes loading.",
+                "message_raw": "debris clearance team enroute, will coordinate safe access once ambulance completes loading."
+              },
+              {
+                "from": "REDCROSS 4",
+                "to": "LOGIC 4",
+                "message": "LOGIC 4, REDCROSS 4, on-scene, patient assessment in progress, will advise transport requirement.",
+                "message_raw": "on-scene, patient assessment in progress, will advise transport requirement."
+              }
+            ]
+          },
+          {
+            "scenario_id": "redcross_5",
+            "title": "Midflight nausea / sick (Stand FIVE)",
+            "objectives": [
+              "Medical meet",
+              "controlled route",
+              "smooth handover"
+            ],
+            "transmissions": [
+              {
+                "from": "REDCROSS 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 5, at Medical Bay, request clearance to proceed via Service Road THREE and cross Taxiway ECHO to Stand FIVE for personnel nauseous midflight.",
+                "message_raw": "at Medical Bay, request clearance to proceed via Service Road THREE and cross Taxiway ECHO to Stand FIVE for personnel nauseous midflight."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 5",
+                "message": "REDCROSS 5, SHEPHARD, proceed via Service Road THREE, hold short of Taxiway ECHO, report holding.",
+                "message_raw": "proceed Service Road THREE, hold short Taxiway ECHO, report holding."
+              },
+              {
+                "from": "REDCROSS 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 5, holding short of Taxiway ECHO.",
+                "message_raw": "holding short Taxiway ECHO."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "REDCROSS 5",
+                "message": "REDCROSS 5, SHEPHARD, at Ground Control, cross Taxiway ECHO now, proceed Stand FIVE, report taxiway vacated.",
+                "message_raw": "cross Taxiway ECHO now, proceed Stand FIVE, report taxiway vacated."
+              },
+              {
+                "from": "REDCROSS 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, REDCROSS 5, crossing Taxiway ECHO now, proceeding Stand FIVE, will report vacated.",
+                "message_raw": "crossing Taxiway ECHO now, proceeding Stand FIVE, will report vacated."
+              },
+              {
+                "from": "MEDICAL CENTRE",
+                "to": "REDCROSS 5",
+                "message": "REDCROSS 5, MEDICAL CENTRE, confirm if hospital transport required on arrival, bay available.",
+                "message_raw": "confirm if hospital transport required on arrival, bay available."
+              },
+              {
+                "from": "REDCROSS 5",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, REDCROSS 5, enroute Stand FIVE, will update after assessment.",
+                "message_raw": "enroute Stand FIVE, will update after assessment."
+              },
+              {
+                "from": "REDCROSS 5",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, REDCROSS 5, on-scene Stand FIVE, patient stable, escorting to Medical Centre for observation.",
+                "message_raw": "on-scene Stand FIVE, patient stable, escorting to Medical Centre for observation."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "series_id": "bluecross",
+        "series_name": "BLUECROSS SERIES",
+        "category": "Domestic Emergencies",
+        "scenario_count": 5,
+        "scenarios": [
+          {
+            "scenario_id": "bluecross_1",
+            "title": "Slip and fall (Barracks stairwell)",
+            "objectives": [
+              "Ambulance access",
+              "scene control",
+              "hospital transport if required"
+            ],
+            "transmissions": [
+              {
+                "from": "BLUECROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 1, at Barracks, request movement clearance to Airbase Hospital for domestic casualty transport, route requires crossing Taxiway FOXTROT at POINT NOVEMBER.",
+                "message_raw": "at Barracks, request movement clearance to Airbase Hospital for domestic casualty transport, route requires crossing Taxiway FOXTROT at POINT NOVEMBER."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 1",
+                "message": "BLUECROSS 1, SHEPHARD, proceed via Perimeter Track, hold short of Taxiway FOXTROT at POINT NOVEMBER, report holding.",
+                "message_raw": "proceed Perimeter Track, hold short Taxiway FOXTROT at POINT NOVEMBER, report holding."
+              },
+              {
+                "from": "BLUECROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 1, holding short of Taxiway FOXTROT at POINT NOVEMBER.",
+                "message_raw": "holding short Taxiway FOXTROT at POINT NOVEMBER."
+              },
+              {
+                "from": "LOGIC 1",
+                "to": "BLUECROSS 1",
+                "message": "BLUECROSS 1, LOGIC 1, at Security Post, stairwell secured, route clear to casualty location, guide in on arrival.",
+                "message_raw": "stairwell secured, route clear to casualty location, guide in on arrival."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 1",
+                "message": "BLUECROSS 1, SHEPHARD, at Ground Control, cross Taxiway FOXTROT now, expedite, report taxiway vacated.",
+                "message_raw": "cross Taxiway FOXTROT now, expedite, report taxiway vacated."
+              },
+              {
+                "from": "BLUECROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 1, crossing Taxiway FOXTROT now, proceeding Airbase Hospital, will report vacated.",
+                "message_raw": "crossing Taxiway FOXTROT now, proceeding Airbase Hospital, will report vacated."
+              },
+              {
+                "from": "BLUECROSS 1",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, BLUECROSS 1, enroute, one patient stable, ETA three minutes, request bay assignment.",
+                "message_raw": "enroute, one patient stable, ETA three minutes, request bay assignment."
+              },
+              {
+                "from": "MEDICAL CENTRE",
+                "to": "BLUECROSS 1",
+                "message": "BLUECROSS 1, MEDICAL CENTRE, at Medical Centre, Bay ONE assigned, reception team standing by.",
+                "message_raw": "Bay ONE assigned, reception team standing by."
+              }
+            ]
+          },
+          {
+            "scenario_id": "bluecross_2",
+            "title": "Unintentional weapon discharge with injury (Training / worksite)",
+            "objectives": [
+              "Medical response",
+              "weapon safety",
+              "secure area"
+            ],
+            "transmissions": [
+              {
+                "from": "LOGIC 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 2, at Security Post, unintentional weapon discharge reported at Training Area KILO, one injured, scene secured, request ambulance and movement restriction at access lane.",
+                "message_raw": "unintentional weapon discharge reported at Training Area KILO, one injured, scene secured, request ambulance and movement restriction at access lane."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 2",
+                "message": "LOGIC 2, SHEPHARD, restriction active at Training Area KILO access, confirm safe route for ambulance.",
+                "message_raw": "restriction active at Training Area KILO access, confirm safe route for ambulance."
+              },
+              {
+                "from": "BLUECROSS 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 2, request clearance to proceed to Training Area KILO for medical response, advise hold points.",
+                "message_raw": "request clearance to proceed to Training Area KILO for medical response, advise hold points."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 2",
+                "message": "BLUECROSS 2, SHEPHARD, proceed via Service Road TWO, hold short of Taxiway DELTA, report holding.",
+                "message_raw": "proceed via Service Road TWO, hold short Taxiway DELTA, report holding."
+              },
+              {
+                "from": "BLUECROSS 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 2, holding short of Taxiway DELTA.",
+                "message_raw": "holding short Taxiway DELTA."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 2",
+                "message": "BLUECROSS 2, SHEPHARD, at Ground Control, cross Taxiway DELTA now, proceed Training Area KILO, report taxiway vacated.",
+                "message_raw": "cross Taxiway DELTA now, proceed Training Area KILO, report taxiway vacated."
+              },
+              {
+                "from": "BLUECROSS 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 2, crossing Taxiway DELTA now, proceeding Training Area KILO, will report vacated.",
+                "message_raw": "crossing Taxiway DELTA now, proceeding Training Area KILO, will report vacated."
+              },
+              {
+                "from": "LOGIC 2",
+                "to": "BLUECROSS 2",
+                "message": "BLUECROSS 2, LOGIC 2, at Security Post, weapon made safe, perimeter held, guide you to casualty.",
+                "message_raw": "weapon made safe, perimeter held, guide you to casualty."
+              },
+              {
+                "from": "BLUECROSS 2",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, BLUECROSS 2, departing scene with patient, stable, ETA five minutes.",
+                "message_raw": "departing scene with patient, stable, ETA five minutes."
+              }
+            ]
+          },
+          {
+            "scenario_id": "bluecross_3",
+            "title": "Food poisoning (Mess / pantry)",
+            "objectives": [
+              "Multiple patients",
+              "triage",
+              "transport coordination"
+            ],
+            "transmissions": [
+              {
+                "from": "BLUECROSS 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 3, at Medical Bay, suspected food poisoning reported at Mess SIERRA, multiple personnel unwell, request clearance to proceed and stage at Mess SIERRA access.",
+                "message_raw": "suspected food poisoning reported at Mess SIERRA, multiple personnel unwell, request clearance to proceed and stage at Mess SIERRA access."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 3",
+                "message": "BLUECROSS 3, SHEPHARD, proceed via Perimeter Track, report on-scene and advise if additional ambulances required.",
+                "message_raw": "proceed via Perimeter Track, report on-scene and advise if additional ambulances required."
+              },
+              {
+                "from": "LOGIC 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 3, at Security Post, Mess SIERRA access controlled, crowd managed, staging area established for ambulances.",
+                "message_raw": "Mess SIERRA access controlled, crowd managed, staging area established for ambulances."
+              },
+              {
+                "from": "MEDICAL CENTRE",
+                "to": "BLUECROSS 3",
+                "message": "BLUECROSS 3, MEDICAL CENTRE, confirm approximate patient count on arrival for triage planning.",
+                "message_raw": "confirm approximate patient count on arrival for triage planning."
+              },
+              {
+                "from": "BLUECROSS 3",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, BLUECROSS 3, on-scene Mess SIERRA, multiple patients, triage starting, will update transport requirements.",
+                "message_raw": "on-scene Mess SIERRA, multiple patients, triage starting, will update transport requirements."
+              },
+              {
+                "from": "BLUECROSS 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 3, request additional BLUECROSS unit for transport rotation, patients stable but require observation.",
+                "message_raw": "request additional BLUECROSS unit for transport rotation, patients stable but require observation."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 3",
+                "message": "BLUECROSS 3, SHEPHARD, at Ground Control, additional unit being dispatched, maintain updates.",
+                "message_raw": "additional unit being dispatched, maintain updates."
+              }
+            ]
+          },
+          {
+            "scenario_id": "bluecross_4",
+            "title": "Personnel fainted (Admin building)",
+            "objectives": [
+              "Quick response",
+              "lift access restrictions if needed"
+            ],
+            "transmissions": [
+              {
+                "from": "BLUECROSS 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 4, at Medical Bay, personnel fainted at Admin Block ECHO, request clearance to proceed to Admin Block ECHO for assessment.",
+                "message_raw": "personnel fainted at Admin Block ECHO, request clearance to proceed to Admin Block ECHO for assessment."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 4",
+                "message": "BLUECROSS 4, SHEPHARD, proceed via Service Road ONE, report on-scene.",
+                "message_raw": "proceed via Service Road ONE, report on-scene."
+              },
+              {
+                "from": "LOGIC 4",
+                "to": "BLUECROSS 4",
+                "message": "BLUECROSS 4, LOGIC 4, at Security Post, elevator access clear, crowd moved back, guide you to patient.",
+                "message_raw": "elevator access clear, crowd moved back, guide you to patient."
+              },
+              {
+                "from": "BLUECROSS 4",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, BLUECROSS 4, at Medical Bay, patient regained consciousness, transporting to Medical Centre for checks, ETA four minutes.",
+                "message_raw": "patient regained consciousness, transporting to Medical Centre for checks, ETA four minutes."
+              },
+              {
+                "from": "MEDICAL CENTRE",
+                "to": "BLUECROSS 4",
+                "message": "BLUECROSS 4, MEDICAL CENTRE, at Medical Centre, Bay TWO ready.",
+                "message_raw": "Bay TWO ready."
+              }
+            ]
+          },
+          {
+            "scenario_id": "bluecross_5",
+            "title": "Suspected heart attack (Worksite)",
+            "objectives": [
+              "Priority movement",
+              "escort",
+              "hospital readiness"
+            ],
+            "transmissions": [
+              {
+                "from": "BLUECROSS 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 5, at Medical Bay, suspected heart attack at Worksite BRAVO, request priority clearance to Medical Centre, route requires Taxiway ECHO crossing at POINT MIKE.",
+                "message_raw": "suspected heart attack at Worksite BRAVO, request priority clearance to Medical Centre, route requires Taxiway ECHO crossing at POINT MIKE."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 5",
+                "message": "BLUECROSS 5, SHEPHARD, priority approved, hold short of Taxiway ECHO at POINT MIKE, report holding.",
+                "message_raw": "priority approved, hold short Taxiway ECHO at POINT MIKE, report holding."
+              },
+              {
+                "from": "SAFETY VEHICLE 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SAFETY VEHICLE 1, escort formed with BLUECROSS 5 at POINT MIKE, request immediate crossing clearance.",
+                "message_raw": "escort formed with BLUECROSS 5 at POINT MIKE, request immediate crossing clearance."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": [
+                  "SAFETY VEHICLE 1",
+                  "BLUECROSS 5"
+                ],
+                "message": "SAFETY VEHICLE 1, BLUECROSS 5, SHEPHARD, at Ground Control, cross Taxiway ECHO at POINT MIKE now, expedite, report taxiway vacated.",
+                "message_raw": "cross Taxiway ECHO at POINT MIKE now, expedite, report taxiway vacated."
+              },
+              {
+                "from": "SAFETY VEHICLE 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SAFETY VEHICLE 1, crossing POINT MIKE now with BLUECROSS 5, expediting, will report vacated.",
+                "message_raw": "crossing POINT MIKE now with BLUECROSS 5, expediting, will report vacated."
+              },
+              {
+                "from": "BLUECROSS 5",
+                "to": "MEDICAL CENTRE",
+                "message": "MEDICAL CENTRE, BLUECROSS 5, enroute, priority patient, ETA two minutes, request Bay ONE and team ready.",
+                "message_raw": "enroute, priority patient, ETA two minutes, request Bay ONE and team ready."
+              },
+              {
+                "from": "MEDICAL CENTRE",
+                "to": "BLUECROSS 5",
+                "message": "BLUECROSS 5, MEDICAL CENTRE, at Medical Centre, Bay ONE ready, team standing by.",
+                "message_raw": "Bay ONE ready, team standing by."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "series_id": "logic",
+        "series_name": "LOGIC SERIES",
+        "category": "Security",
+        "scenario_count": 5,
+        "scenarios": [
+          {
+            "scenario_id": "logic_1",
+            "title": "Drone sighting in restricted area (near runway/taxiway)",
+            "objectives": [
+              "Immediate restrictions",
+              "intercept",
+              "confirm clear"
+            ],
+            "transmissions": [
+              {
+                "from": "LOGIC 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 1, at Security Post, drone sighted near Restricted Area ALPHA adjacent Taxiway BRAVO, request immediate movement restriction in affected segment.",
+                "message_raw": "drone sighted near Restricted Area ALPHA adjacent Taxiway BRAVO, request immediate movement restriction in affected segment."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 1",
+                "message": "LOGIC 1, SHEPHARD, restriction active on Taxiway BRAVO segment adjacent Restricted Area ALPHA, keep this station advised.",
+                "message_raw": "restriction active on Taxiway BRAVO segment adjacent Restricted Area ALPHA, keep this station advised."
+              },
+              {
+                "from": "SPARTAN 1",
+                "to": "LOGIC 1",
+                "message": "LOGIC 1, SPARTAN 1, proceed intercept, maintain perimeter safety, report drone location updates.",
+                "message_raw": "proceed intercept, maintain perimeter safety, report drone location updates."
+              },
+              {
+                "from": "LOGIC 1",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 1, moving to intercept, perimeter being expanded, will report updates.",
+                "message_raw": "moving to intercept, perimeter being expanded, will report updates."
+              },
+              {
+                "from": "LOGIC 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 1, at Security Post, drone no longer in visual, area being swept, request restriction remain until sweep complete.",
+                "message_raw": "drone no longer in visual, area being swept, request restriction remain until sweep complete."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 1",
+                "message": "LOGIC 1, SHEPHARD, restriction remains active, report all clear for lift.",
+                "message_raw": "restriction remains active, report all clear for lift."
+              },
+              {
+                "from": "LOGIC 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 1, at Security Post, sweep complete, no drone sighted, request lift restriction.",
+                "message_raw": "sweep complete, no drone sighted, request lift restriction."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 1",
+                "message": "LOGIC 1, SHEPHARD, restriction lifted, normal movement resumed.",
+                "message_raw": "restriction lifted, normal movement resumed."
+              }
+            ]
+          },
+          {
+            "scenario_id": "logic_2",
+            "title": "Illegal photography / suspicious filming (perimeter)",
+            "objectives": [
+              "Detain",
+              "verify identity",
+              "preserve safety"
+            ],
+            "transmissions": [
+              {
+                "from": "LOGIC 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 2, at Security Post, suspicious person taking photos near Perimeter Fence SECTOR TWO, request clearance to proceed and hold traffic on adjacent service lane.",
+                "message_raw": "suspicious person taking photos near Perimeter Fence SECTOR TWO, request clearance to proceed and hold traffic on adjacent service lane."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 2",
+                "message": "LOGIC 2, SHEPHARD, at Ground Control, adjacent service lane restricted for your operation, proceed and report outcome.",
+                "message_raw": "adjacent service lane restricted for your operation, proceed and report outcome."
+              },
+              {
+                "from": "LOGIC 2",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 2, at Security Post, contact made with subject, verifying identity, will advise.",
+                "message_raw": "contact made with subject, verifying identity, will advise."
+              },
+              {
+                "from": "LOGIC 2",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 2, at Security Post, subject identified, escorted out of restricted zone, incident logged.",
+                "message_raw": "subject identified, escorted out of restricted zone, incident logged."
+              }
+            ]
+          },
+          {
+            "scenario_id": "logic_3",
+            "title": "Dog rampage / possible break-in indication",
+            "objectives": [
+              "Secure area",
+              "protect personnel",
+              "call support if needed"
+            ],
+            "transmissions": [
+              {
+                "from": "LOGIC 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 3, at Security Post, aggressive dog reported near Gate DELTA, potential breach indicator, request restriction of gate access and support.",
+                "message_raw": "aggressive dog reported near Gate DELTA, potential breach indicator, request restriction of gate access and support."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 3",
+                "message": "LOGIC 3, SHEPHARD, at Ground Control, Gate DELTA access restricted, proceed to contain and assess breach indicators.",
+                "message_raw": "Gate DELTA access restricted, proceed to contain and assess breach indicators."
+              },
+              {
+                "from": "STALKER 2",
+                "to": "LOGIC 3",
+                "message": "LOGIC 3, STALKER 2, at Maintenance Depot, gate hardware inspection team can attend if damage confirmed, advise status.",
+                "message_raw": "gate hardware inspection team can attend if damage confirmed, advise status."
+              },
+              {
+                "from": "LOGIC 3",
+                "to": "STALKER 2",
+                "message": "STALKER 2, LOGIC 3, at Security Post, gate checked, no damage observed, request STANDBY for inspection of fence segment.",
+                "message_raw": "gate checked, no damage observed, request standby for inspection of fence segment."
+              },
+              {
+                "from": "LOGIC 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 3, at Security Post, area stabilized, fence line check ongoing, will report completion.",
+                "message_raw": "area stabilized, fence line check ongoing, will report completion."
+              }
+            ]
+          },
+          {
+            "scenario_id": "logic_4",
+            "title": "Damaged restricted door / broken windows (infrastructure)",
+            "objectives": [
+              "Secure",
+              "repair tasking",
+              "preserve scene"
+            ],
+            "transmissions": [
+              {
+                "from": "LOGIC 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 4, at Security Post, restricted door damaged at Facility HOTEL, request immediate restriction of access and STALKER support for repairs.",
+                "message_raw": "restricted door damaged at Facility HOTEL, request immediate restriction of access and STALKER support for repairs."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 4",
+                "message": "LOGIC 4, SHEPHARD, at Ground Control, access restricted, STALKER tasked, report when repair complete.",
+                "message_raw": "access restricted, STALKER tasked, report when repair complete."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "LOGIC 4",
+                "message": "LOGIC 4, STALKER 1, enroute Facility HOTEL to secure and repair door, estimate one-five minutes.",
+                "message_raw": "enroute Facility HOTEL to secure and repair door, estimate one-five minutes."
+              },
+              {
+                "from": "LOGIC 4",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 4, at Security Post, facility perimeter secured, awaiting STALKER repair, will report when restored.",
+                "message_raw": "facility perimeter secured, awaiting STALKER repair, will report when restored."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "LOGIC 4",
+                "message": "LOGIC 4, STALKER 1, at Maintenance Depot, door secured and repaired, access can be restored on your confirmation.",
+                "message_raw": "door secured and repaired, access can be restored on your confirmation."
+              },
+              {
+                "from": "LOGIC 4",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 4, repairs complete, request lift restriction.",
+                "message_raw": "repairs complete, request lift restriction."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 4",
+                "message": "LOGIC 4, SHEPHARD, restriction lifted, normal access resumed.",
+                "message_raw": "restriction lifted, normal access resumed."
+              }
+            ]
+          },
+          {
+            "scenario_id": "logic_5",
+            "title": "Gunshot-like noise / suspected contraband (Warehouse Area)",
+            "objectives": [
+              "Search",
+              "control access",
+              "medical standby as precaution"
+            ],
+            "transmissions": [
+              {
+                "from": "LOGIC 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 5, at Security Post, report loud bang near Warehouse Area INDIA, possible security incident, request movement restriction and support.",
+                "message_raw": "report loud bang near Warehouse Area INDIA, possible security incident, request movement restriction and support."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 5",
+                "message": "LOGIC 5, SHEPHARD, at Ground Control, Warehouse Area INDIA access restricted, proceed investigate and report.",
+                "message_raw": "Warehouse Area INDIA access restricted, proceed investigate and report."
+              },
+              {
+                "from": "BLUECROSS 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, BLUECROSS 1, STANDBY for potential medical response near Warehouse Area INDIA, advise if required.",
+                "message_raw": "standby for potential medical response near Warehouse Area INDIA, advise if required."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "BLUECROSS 1",
+                "message": "BLUECROSS 1, SHEPHARD, STANDBY at safe staging point, remain available.",
+                "message_raw": "standby at safe staging point, remain available."
+              },
+              {
+                "from": "LOGIC 5",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 5, at Security Post, area searched, no injured personnel found, investigating source, will update.",
+                "message_raw": "area searched, no injured personnel found, investigating source, will update."
+              },
+              {
+                "from": "LOGIC 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 5, at Security Post, incident resolved, request lift restriction.",
+                "message_raw": "incident resolved, request lift restriction."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 5",
+                "message": "LOGIC 5, SHEPHARD, restriction lifted, normal movement resumed.",
+                "message_raw": "restriction lifted, normal movement resumed."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "series_id": "stalker",
+        "series_name": "STALKER SERIES",
+        "category": "Platform / Maintenance",
+        "scenario_count": 5,
+        "scenarios": [
+          {
+            "scenario_id": "stalker_1",
+            "title": "Pothole repair near runway edge",
+            "objectives": [
+              "Controlled access",
+              "work zone protection",
+              "vacate on instruction"
+            ],
+            "transmissions": [
+              {
+                "from": "STALKER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 1, at Maintenance Depot, request clearance to proceed via Service Road TWO and enter work zone near Runway TWO NINER edge for pothole repairs.",
+                "message_raw": "at Maintenance Depot, request clearance to proceed via Service Road TWO and enter work zone near Runway TWO NINER edge for pothole repairs."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 1",
+                "message": "STALKER 1, SHEPHARD, cleared to proceed via Service Road TWO, hold short of Taxiway INDIA, report holding.",
+                "message_raw": "cleared to proceed via Service Road TWO, hold short Taxiway INDIA, report holding."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 1, holding short of Taxiway INDIA.",
+                "message_raw": "holding short Taxiway INDIA."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 1",
+                "message": "STALKER 1, SHEPHARD, at Ground Control, cross Taxiway INDIA now, proceed to Runway TWO NINER edge work zone, remain on shoulder, report on-site.",
+                "message_raw": "cross Taxiway INDIA now, proceed to Runway TWO NINER edge work zone, remain on shoulder, report on-site."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 1, crossing Taxiway INDIA now, proceeding to work zone, will report on-site.",
+                "message_raw": "crossing Taxiway INDIA now, proceeding to work zone, will report on-site."
+              },
+              {
+                "from": "LOGIC 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 1, at Security Post, security escort established around work zone, access controlled.",
+                "message_raw": "security escort established around work zone, access controlled."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 1, at Maintenance Depot, on-site, repairs commencing, estimate two-zero minutes.",
+                "message_raw": "on-site, repairs commencing, estimate two-zero minutes."
+              },
+              {
+                "from": "STALKER 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 1, work complete, request clearance to vacate via same route.",
+                "message_raw": "work complete, request clearance to vacate via same route."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 1",
+                "message": "STALKER 1, SHEPHARD, vacate via same route, report clear of manoeuvring area.",
+                "message_raw": "vacate via same route, report clear of manoeuvring area."
+              }
+            ]
+          },
+          {
+            "scenario_id": "stalker_2",
+            "title": "Airfield lighting repair (Taxiway BRAVO edge)",
+            "objectives": [
+              "Enter manoeuvring area safely",
+              "complete repair",
+              "confirm clear"
+            ],
+            "transmissions": [
+              {
+                "from": "STALKER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 2, at Apron Access POINT DELTA, request clearance to enter manoeuvring area for edge lighting repair near Taxiway BRAVO.",
+                "message_raw": "at Apron Access POINT DELTA, request clearance to enter manoeuvring area for edge lighting repair near Taxiway BRAVO."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 2",
+                "message": "STALKER 2, SHEPHARD, cleared via Taxiway BRAVO shoulder only, remain clear of centreline, report on-site.",
+                "message_raw": "cleared via Taxiway BRAVO shoulder only, remain clear of centreline, report on-site."
+              },
+              {
+                "from": "STALKER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 2, at Maintenance Depot, on-site Taxiway BRAVO edge, lighting repair in progress, estimate one-five minutes.",
+                "message_raw": "on-site Taxiway BRAVO edge, lighting repair in progress, estimate one-five minutes."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 2",
+                "message": "STALKER 2, SHEPHARD, at Ground Control, advise when complete and ready to vacate.",
+                "message_raw": "advise when complete and ready to vacate."
+              },
+              {
+                "from": "STALKER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 2, work complete, vacating, will report clear.",
+                "message_raw": "work complete, vacating, will report clear."
+              },
+              {
+                "from": "STALKER 2",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 2, at Maintenance Depot, clear of manoeuvring area.",
+                "message_raw": "clear of manoeuvring area."
+              }
+            ]
+          },
+          {
+            "scenario_id": "stalker_3",
+            "title": "Runway repair after aircraft incident (remove debris / restore surface)",
+            "objectives": [
+              "Close runway",
+              "coordinate salvage + repairs",
+              "reopen when safe"
+            ],
+            "transmissions": [
+              {
+                "from": "SPARTAN 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SPARTAN 1, at Command Post, runway incident resolved, request STALKER entry for runway repair and inspection, maintain runway closure until declared serviceable.",
+                "message_raw": "runway incident resolved, request STALKER entry for runway repair and inspection, maintain runway closure until declared serviceable."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, SHEPHARD, at Ground Control, runway remains closed, STALKER will be routed and controlled, advise required work zones.",
+                "message_raw": "runway remains closed, STALKER will be routed and controlled, advise required work zones."
+              },
+              {
+                "from": "STALKER 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 3, request clearance to enter Runway ZERO TWO via Taxiway ALPHA for surface inspection and repair tasks.",
+                "message_raw": "request clearance to enter Runway ZERO TWO via Taxiway ALPHA for surface inspection and repair tasks."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 3",
+                "message": "STALKER 3, SHEPHARD, cleared to enter Runway ZERO TWO via Taxiway ALPHA, proceed to midpoint, report on-scene and keep movement controlled.",
+                "message_raw": "cleared to enter Runway ZERO TWO via Taxiway ALPHA, proceed to midpoint, report on-scene and keep movement controlled."
+              },
+              {
+                "from": "TOWING PARTY",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, TOWING PARTY, at Salvage Point, salvage reposition complete, runway debris lane available for STALKER work.",
+                "message_raw": "salvage reposition complete, runway debris lane available for STALKER work."
+              },
+              {
+                "from": "STALKER 3",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, STALKER 3, on-scene Runway ZERO TWO midpoint, inspection ongoing, repairs commencing, will advise completion.",
+                "message_raw": "on-scene Runway ZERO TWO midpoint, inspection ongoing, repairs commencing, will advise completion."
+              },
+              {
+                "from": "STALKER 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 3, repairs complete, runway surface checked, request runway reopening on your confirmation.",
+                "message_raw": "repairs complete, runway surface checked, request runway reopening on your confirmation."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, SHEPHARD, at Ground Control, STALKER reports runway serviceable, confirm reopen authority.",
+                "message_raw": "STALKER reports runway serviceable, confirm reopen authority."
+              },
+              {
+                "from": "SPARTAN 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SPARTAN 1, at Command Post, reopen approved, continue monitoring and log completion.",
+                "message_raw": "reopen approved, continue monitoring and log completion."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "ALL STATIONS",
+                "message": "All stations, SHEPHARD, Runway ZERO TWO reopened, normal operations resumed.",
+                "message_raw": "Runway ZERO TWO reopened, normal operations resumed."
+              }
+            ]
+          },
+          {
+            "scenario_id": "stalker_4",
+            "title": "Earthquake / structural damage impacts airfield operations",
+            "objectives": [
+              "Safety cordon",
+              "damage assessment",
+              "suspend operations",
+              "staged recovery"
+            ],
+            "transmissions": [
+              {
+                "from": "STALKER 4",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, STALKER 4, at Maintenance Depot, structural damage reported near Apron WEST and taxi route, request immediate shutdown of affected areas for assessment.",
+                "message_raw": "structural damage reported near Apron WEST and taxi route, request immediate shutdown of affected areas for assessment."
+              },
+              {
+                "from": "SPARTAN 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SPARTAN 1, at Command Post, suspend movements near Apron WEST and adjacent taxi routes, establish safety cordon with LOGIC.",
+                "message_raw": "suspend movements near Apron WEST and adjacent taxi routes, establish safety cordon with LOGIC."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, SHEPHARD, suspension active for Apron WEST sector, advise when restrictions can be adjusted.",
+                "message_raw": "suspension active for Apron WEST sector, advise when restrictions can be adjusted."
+              },
+              {
+                "from": "LOGIC 2",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, LOGIC 2, cordon established, access restricted, crowd moved back.",
+                "message_raw": "cordon established, access restricted, crowd moved back."
+              },
+              {
+                "from": "STALKER 4",
+                "to": "SPARTAN 1",
+                "message": "SPARTAN 1, STALKER 4, at Maintenance Depot, assessment ongoing, multiple defects identified, repairs required, estimate to follow.",
+                "message_raw": "assessment ongoing, multiple defects identified, repairs required, estimate to follow."
+              },
+              {
+                "from": "SPARTAN 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SPARTAN 1, at Command Post, maintain suspension until STALKER declares safe, prepare alternate routing if available.",
+                "message_raw": "maintain suspension until STALKER declares safe, prepare alternate routing if available."
+              }
+            ]
+          },
+          {
+            "scenario_id": "stalker_5",
+            "title": "Person on airfield with aircraft approaching (immediate hazard)",
+            "objectives": [
+              "Clear person",
+              "secure area",
+              "prevent conflict",
+              "confirm all clear"
+            ],
+            "transmissions": [
+              {
+                "from": "STALKER 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 5, at Maintenance Depot, unauthorized person sighted on airfield near Taxiway CHARLIE boundary, request immediate security response and temporary restriction.",
+                "message_raw": "unauthorized person sighted on airfield near Taxiway CHARLIE boundary, request immediate security response and temporary restriction."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "STALKER 5",
+                "message": "STALKER 5, SHEPHARD, restriction active at Taxiway CHARLIE boundary segment, LOGIC responding, maintain visual and report person movement.",
+                "message_raw": "restriction active at Taxiway CHARLIE boundary segment, LOGIC responding, maintain visual and report person movement."
+              },
+              {
+                "from": "LOGIC 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 3, responding to location now, will intercept and escort off airfield.",
+                "message_raw": "responding to location now, will intercept and escort off airfield."
+              },
+              {
+                "from": "SAFETY VEHICLE 1",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, SAFETY VEHICLE 1, at Movement Control, available to support cordon and keep routes clear, advise tasking.",
+                "message_raw": "available to support cordon and keep routes clear, advise tasking."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "SAFETY VEHICLE 1",
+                "message": "SAFETY VEHICLE 1, SHEPHARD, proceed to Service Road adjacent Taxiway CHARLIE, establish visual cordon, remain clear of manoeuvring area, report established.",
+                "message_raw": "proceed to Service Road adjacent Taxiway CHARLIE, establish visual cordon, remain clear of manoeuvring area, report established."
+              },
+              {
+                "from": "LOGIC 3",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, LOGIC 3, at Security Post, person removed from airfield, area swept, request lift restriction.",
+                "message_raw": "person removed from airfield, area swept, request lift restriction."
+              },
+              {
+                "from": "SHEPHARD",
+                "to": "LOGIC 3",
+                "message": "LOGIC 3, SHEPHARD, restriction lifted, normal movement resumed.",
+                "message_raw": "restriction lifted, normal movement resumed."
+              },
+              {
+                "from": "STALKER 5",
+                "to": "SHEPHARD",
+                "message": "SHEPHARD, STALKER 5, at Maintenance Depot, airfield clear from my position.",
+                "message_raw": "airfield clear from my position."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "gdd_reference_extract": {
+    "notes": [
+      "This extract is included as a reference transcript source from the GDD document.",
+      "GDD uses 'SHEPHERD' and 'SPARTAN' in places; use callsign_aliases if you need strict in-game callsigns."
+    ],
+    "blocks": [
+      "ROLE QUICK REF (CALLSIGNS)",
+      "REDCROSS SERIES (Aircraft Emergencies) — 5 scenarios (completed)",
+      "Scenario 1 — Aircraft crash (Fuel Area)\nObjectives: Medical response, cordon, fire cover, controlled routes",
+      "SPARTAN, SHEPHERD, aircraft crash reported at Fuel Area, activate emergency plan, restrict movements adjacent Fuel Area.\nSHEPHERD, SPARTAN, restriction active, responders will be routed via Service Road ONE, report if additional closures required.\nREDCROSS 1, SHEPHERD, at Medical Bay, request clearance to proceed via Service Road ONE and cross Taxiway ALPHA to Fuel Area for aircraft crash response.\nSHEPHERD, REDCROSS 1, proceed Service Road ONE, hold short Taxiway ALPHA at holding point, report holding.\nREDCROSS 1, SHEPHERD, holding short Taxiway ALPHA.\nTENDER 1, SHEPHERD, at AES Station, request clearance to proceed to Fuel Area for fire cover and scene protection.\nSHEPHERD, TENDER 1, proceed Service Road ONE, hold short Taxiway ALPHA, report holding.\nTENDER 1, SHEPHERD, holding short Taxiway ALPHA.\nSHEPHERD, REDCROSS 1, TENDER 1, cross Taxiway ALPHA now, expedite, report taxiway vacated.\nREDCROSS 1, SHEPHERD, crossing Taxiway ALPHA now, expediting to Fuel Area, will report vacated.\nTENDER 1, SHEPHERD, crossing Taxiway ALPHA now, expediting to Fuel Area, will report vacated.\nLOGIC 1, SPARTAN, cordon established around Fuel Area access, crowd control in place, access restricted to responders only.\nREDCROSS 1, SPARTAN, on-scene Fuel Area, medical assessment ongoing, will report casualty status.\nTENDER 1, SPARTAN, on-scene Fuel Area, fire cover established, standing by.",
+      "Scenario 2 — Aircrew fainted after landing (Hangar THREE / Stand area)\nObjectives: Rapid medical access, keep route clear, control bystanders",
+      "REDCROSS 2, SHEPHERD, at Station South, request clearance to proceed via Service Road TWO and cross Taxiway BRAVO to Hangar THREE for personnel fainted after landing.\nSHEPHERD, REDCROSS 2, proceed Service Road TWO, hold short Taxiway BRAVO, report holding.\nREDCROSS 2, SHEPHERD, holding short Taxiway BRAVO.\nLOGIC 2, SPARTAN, crowd forming at Hangar THREE access, moving personnel back, keeping route open for ambulance.\nSHEPHERD, REDCROSS 2, cross Taxiway BRAVO now, expedite, report taxiway vacated.\nREDCROSS 2, SHEPHERD, crossing Taxiway BRAVO now, expediting to Hangar THREE, will report vacated.\nREDCROSS 2, SPARTAN, on-scene Hangar THREE, patient conscious, assessment in progress, will advise if hospital transport required.\nSPARTAN, REDCROSS 2, confirm if additional medical support required, maintain updates.",
+      "Scenario 3 — Aircraft explosion (Airfield East)\nObjectives: Fire cover, casualty extraction, cordon, controlled access",
+      "SPARTAN, SHEPHERD, aircraft explosion reported Airfield East, close affected taxi routes and maintain sterile access for responders.\nSHEPHERD, SPARTAN, restrictions active Airfield East boundary, routing responders via Perimeter Track.\nTENDER 2, SHEPHERD, at AES Station, request clearance to proceed via Perimeter Track and cross Taxiway CHARLIE to Airfield East for fire response.\nSHEPHERD, TENDER 2, proceed Perimeter Track, hold short Taxiway CHARLIE, report holding.\nTENDER 2, SHEPHERD, holding short Taxiway CHARLIE.\nREDCROSS 3, SHEPHERD, at Fire Station area, request clearance to proceed via Perimeter Track and cross Taxiway CHARLIE to Airfield East for casualty response.\nSHEPHERD, REDCROSS 3, proceed Perimeter Track, hold short Taxiway CHARLIE, report holding.\nREDCROSS 3, SHEPHERD, holding short Taxiway CHARLIE.\nSHEPHERD, TENDER 2, REDCROSS 3, cross Taxiway CHARLIE now, expedite, report taxiway vacated.\nTENDER 2, SHEPHERD, crossing Taxiway CHARLIE now, expediting to Airfield East, will report vacated.\nREDCROSS 3, SHEPHERD, crossing Taxiway CHARLIE now, expediting to Airfield East, will report vacated.\nLOGIC 3, SPARTAN, cordon established Airfield East, access restricted, perimeter secured.\nTENDER 2, SPARTAN, on-scene Airfield East, fire cover established, scene risk managed, standing by.\nREDCROSS 3, SPARTAN, on-scene Airfield East, medical response in progress, will report evacuation.",
+      "Scenario 4 — Aircraft vehicle collision (Perimeter Road)\nObjectives: Medical response, traffic control, debris clearance",
+      "REDCROSS 4, SHEPHERD, at Gate BRAVO, request clearance to proceed via Service Road ONE and cross Taxiway DELTA to Perimeter Road for vehicle collision.\nSHEPHERD, REDCROSS 4, proceed Service Road ONE, hold short Taxiway DELTA, report holding.\nREDCROSS 4, SHEPHERD, holding short Taxiway DELTA.\nLOGIC 4, SHEPHERD, at Perimeter Road, collision scene secured, traffic stopped, request ambulance access lane maintained.\nSHEPHERD, REDCROSS 4, cross Taxiway DELTA now, expedite, report taxiway vacated.\nREDCROSS 4, SHEPHERD, crossing Taxiway DELTA now, expediting to Perimeter Road, will report vacated.\nSTALKER 1, LOGIC 4, debris clearance team enroute, will coordinate safe access once ambulance completes loading.\nREDCROSS 4, LOGIC 4, on-scene, patient assessment in progress, will advise transport requirement.",
+      "Scenario 5 — Midflight nausea / sick (Stand FIVE)\nObjectives: Medical meet, controlled route, smooth handover",
+      "REDCROSS 5, SHEPHERD, at Medical Bay, request clearance to proceed via Service Road THREE and cross Taxiway ECHO to Stand FIVE for personnel nauseous midflight.\nSHEPHERD, REDCROSS 5, proceed Service Road THREE, hold short Taxiway ECHO, report holding.\nREDCROSS 5, SHEPHERD, holding short Taxiway ECHO.\nSHEPHERD, REDCROSS 5, cross Taxiway ECHO now, proceed Stand FIVE, report taxiway vacated.\nREDCROSS 5, SHEPHERD, crossing Taxiway ECHO now, proceeding Stand FIVE, will report vacated.\nMEDICAL CENTRE, REDCROSS 5, confirm if hospital transport required on arrival, bay available.\nREDCROSS 5, MEDICAL CENTRE, enroute Stand FIVE, will update after assessment.\nREDCROSS 5, MEDICAL CENTRE, on-scene Stand FIVE, patient stable, escorting to Medical Centre for observation.",
+      "BLUECROSS SERIES (Domestic Emergencies) — 5 scenarios (completed)",
+      "Scenario 1 — Slip and fall (Barracks stairwell)\nObjectives: Ambulance access, scene control, hospital transport if required",
+      "BLUECROSS 1, SHEPHERD, at Barracks, request movement clearance to Airbase Hospital for domestic casualty transport, route requires crossing Taxiway FOXTROT at POINT NOVEMBER.\nSHEPHERD, BLUECROSS 1, proceed Perimeter Track, hold short Taxiway FOXTROT at POINT NOVEMBER, report holding.\nBLUECROSS 1, SHEPHERD, holding short Taxiway FOXTROT at POINT NOVEMBER.\nLOGIC 1, BLUECROSS 1, stairwell secured, route clear to casualty location, guide in on arrival.\nSHEPHERD, BLUECROSS 1, cross Taxiway FOXTROT now, expedite, report taxiway vacated.\nBLUECROSS 1, SHEPHERD, crossing Taxiway FOXTROT now, proceeding Airbase Hospital, will report vacated.\nBLUECROSS 1, MEDICAL CENTRE, enroute, one patient stable, ETA three minutes, request bay assignment.\nMEDICAL CENTRE, BLUECROSS 1, Bay ONE assigned, reception team standing by.",
+      "Scenario 2 — Unintentional weapon discharge with injury (Training / worksite)\nObjectives: Medical response, weapon safety, secure area",
+      "LOGIC 2, SHEPHERD, unintentional weapon discharge reported at Training Area KILO, one injured, scene secured, request ambulance and movement restriction at access lane.\nSHEPHERD, LOGIC 2, restriction active at Training Area KILO access, confirm safe route for ambulance.\nBLUECROSS 2, SHEPHERD, request clearance to proceed to Training Area KILO for medical response, advise hold points.\nSHEPHERD, BLUECROSS 2, proceed via Service Road TWO, hold short Taxiway DELTA, report holding.\nBLUECROSS 2, SHEPHERD, holding short Taxiway DELTA.\nSHEPHERD, BLUECROSS 2, cross Taxiway DELTA now, proceed Training Area KILO, report taxiway vacated.\nBLUECROSS 2, SHEPHERD, crossing Taxiway DELTA now, proceeding Training Area KILO, will report vacated.\nLOGIC 2, BLUECROSS 2, weapon made safe, perimeter held, guide you to casualty.\nBLUECROSS 2, MEDICAL CENTRE, departing scene with patient, stable, ETA five minutes.",
+      "Scenario 3 — Food poisoning (Mess / pantry)\nObjectives: Multiple patients, triage, transport coordination",
+      "BLUECROSS 3, SHEPHERD, suspected food poisoning reported at Mess SIERRA, multiple personnel unwell, request clearance to proceed and stage at Mess SIERRA access.\nSHEPHERD, BLUECROSS 3, proceed via Perimeter Track, report on-scene and advise if additional ambulances required.\nLOGIC 3, SHEPHERD, Mess SIERRA access controlled, crowd managed, staging area established for ambulances.\nMEDICAL CENTRE, BLUECROSS 3, confirm approximate patient count on arrival for triage planning.\nBLUECROSS 3, MEDICAL CENTRE, on-scene Mess SIERRA, multiple patients, triage starting, will update transport requirements.\nBLUECROSS 3, SHEPHERD, request additional BLUECROSS unit for transport rotation, patients stable but require observation.\nSHEPHERD, BLUECROSS 3, additional unit being dispatched, maintain updates.",
+      "Scenario 4 — Personnel fainted (Admin building)\nObjectives: Quick response, lift access restrictions if needed",
+      "BLUECROSS 4, SHEPHERD, personnel fainted at Admin Block ECHO, request clearance to proceed to Admin Block ECHO for assessment.\nSHEPHERD, BLUECROSS 4, proceed via Service Road ONE, report on-scene.\nLOGIC 4, BLUECROSS 4, elevator access clear, crowd moved back, guide you to patient.\nBLUECROSS 4, MEDICAL CENTRE, patient regained consciousness, transporting to Medical Centre for checks, ETA four minutes.\nMEDICAL CENTRE, BLUECROSS 4, Bay TWO ready.",
+      "Scenario 5 — Suspected heart attack (Worksite)\nObjectives: Priority movement, escort, hospital readiness",
+      "BLUECROSS 5, SHEPHERD, suspected heart attack at Worksite BRAVO, request priority clearance to Medical Centre, route requires Taxiway ECHO crossing at POINT MIKE.\nSHEPHERD, BLUECROSS 5, priority approved, hold short Taxiway ECHO at POINT MIKE, report holding.\nSAFETY VEHICLE 1, SHEPHERD, escort formed with BLUECROSS 5 at POINT MIKE, request immediate crossing clearance.\nSHEPHERD, SAFETY VEHICLE 1, BLUECROSS 5, cross Taxiway ECHO at POINT MIKE now, expedite, report taxiway vacated.\nSAFETY VEHICLE 1, SHEPHERD, crossing POINT MIKE now with BLUECROSS 5, expediting, will report vacated.\nBLUECROSS 5, MEDICAL CENTRE, enroute, priority patient, ETA two minutes, request Bay ONE and team ready.\nMEDICAL CENTRE, BLUECROSS 5, Bay ONE ready, team standing by.",
+      "LOGIC SERIES (Security) — 5 scenarios (completed)",
+      "Scenario 1 — Drone sighting in restricted area (near runway/taxiway)\nObjectives: Immediate restrictions, intercept, confirm clear",
+      "LOGIC 1, SHEPHERD, drone sighted near Restricted Area ALPHA adjacent Taxiway BRAVO, request immediate movement restriction in affected segment.\nSHEPHERD, LOGIC 1, restriction active on Taxiway BRAVO segment adjacent Restricted Area ALPHA, keep this station advised.\nSPARTAN, LOGIC 1, proceed intercept, maintain perimeter safety, report drone location updates.\nLOGIC 1, SPARTAN, moving to intercept, perimeter being expanded, will report updates.\nLOGIC 1, SHEPHERD, drone no longer in visual, area being swept, request restriction remain until sweep complete.\nSHEPHERD, LOGIC 1, restriction remains active, report all clear for lift.\nLOGIC 1, SHEPHERD, sweep complete, no drone sighted, request lift restriction.\nSHEPHERD, LOGIC 1, restriction lifted, normal movement resumed.",
+      "Scenario 2 — Illegal photography / suspicious filming (perimeter)\nObjectives: Detain, verify identity, preserve safety",
+      "LOGIC 2, SHEPHERD, suspicious person taking photos near Perimeter Fence SECTOR TWO, request clearance to proceed and hold traffic on adjacent service lane.\nSHEPHERD, LOGIC 2, adjacent service lane restricted for your operation, proceed and report outcome.\nLOGIC 2, SPARTAN, contact made with subject, verifying identity, will advise.\nLOGIC 2, SPARTAN, subject identified, escorted out of restricted zone, incident logged.",
+      "Scenario 3 — Dog rampage / possible break-in indication\nObjectives: Secure area, protect personnel, call support if needed",
+      "LOGIC 3, SHEPHERD, aggressive dog reported near Gate DELTA, potential breach indicator, request restriction of gate access and support.\nSHEPHERD, LOGIC 3, Gate DELTA access restricted, proceed to contain and assess breach indicators.\nSTALKER 2, LOGIC 3, gate hardware inspection team can attend if damage confirmed, advise status.\nLOGIC 3, STALKER 2, gate checked, no damage observed, request standby for inspection of fence segment.\nLOGIC 3, SHEPHERD, area stabilized, fence line check ongoing, will report completion.",
+      "Scenario 4 — Damaged restricted door / broken windows (infrastructure)\nObjectives: Secure, repair tasking, preserve scene",
+      "LOGIC 4, SHEPHERD, restricted door damaged at Facility HOTEL, request immediate restriction of access and STALKER support for repairs.\nSHEPHERD, LOGIC 4, access restricted, STALKER tasked, report when repair complete.\nSTALKER 1, LOGIC 4, enroute Facility HOTEL to secure and repair door, estimate one-five minutes.\nLOGIC 4, SPARTAN, facility perimeter secured, awaiting STALKER repair, will report when restored.\nSTALKER 1, LOGIC 4, door secured and repaired, access can be restored on your confirmation.\nLOGIC 4, SHEPHERD, repairs complete, request lift restriction.\nSHEPHERD, LOGIC 4, restriction lifted, normal access resumed.",
+      "Scenario 5 — Gunshot-like noise / suspected contraband (Warehouse Area)\nObjectives: Search, control access, medical standby as precaution",
+      "LOGIC 5, SHEPHERD, report loud bang near Warehouse Area INDIA, possible security incident, request movement restriction and support.\nSHEPHERD, LOGIC 5, Warehouse Area INDIA access restricted, proceed investigate and report.\nBLUECROSS 1, SHEPHERD, standby for potential medical response near Warehouse Area INDIA, advise if required.\nSHEPHERD, BLUECROSS 1, standby at safe staging point, remain available.\nLOGIC 5, SPARTAN, area searched, no injured personnel found, investigating source, will update.\nLOGIC 5, SHEPHERD, incident resolved, request lift restriction.\nSHEPHERD, LOGIC 5, restriction lifted, normal movement resumed.",
+      "STALKER SERIES (Platform / Maintenance) — 5 scenarios (completed)",
+      "Scenario 1 — Pothole repair near runway edge\nObjectives: Controlled access, work zone protection, vacate on instruction",
+      "STALKER 1, SHEPHERD, at Maintenance Depot, request clearance to proceed via Service Road TWO and enter work zone near Runway TWO NINER edge for pothole repairs.\nSHEPHERD, STALKER 1, cleared to proceed via Service Road TWO, hold short Taxiway INDIA, report holding.\nSTALKER 1, SHEPHERD, holding short Taxiway INDIA.\nSHEPHERD, STALKER 1, cross Taxiway INDIA now, proceed to Runway TWO NINER edge work zone, remain on shoulder, report on-site.\nSTALKER 1, SHEPHERD, crossing Taxiway INDIA now, proceeding to work zone, will report on-site.\nLOGIC 1, SHEPHERD, security escort established around work zone, access controlled.\nSTALKER 1, SHEPHERD, on-site, repairs commencing, estimate two-zero minutes.\nSTALKER 1, SHEPHERD, work complete, request clearance to vacate via same route.\nSHEPHERD, STALKER 1, vacate via same route, report clear of manoeuvring area.",
+      "Scenario 2 — Airfield lighting repair (Taxiway BRAVO edge)\nObjectives: Enter manoeuvring area safely, complete repair, confirm clear",
+      "STALKER 2, SHEPHERD, at Apron Access POINT DELTA, request clearance to enter manoeuvring area for edge lighting repair near Taxiway BRAVO.\nSHEPHERD, STALKER 2, cleared via Taxiway BRAVO shoulder only, remain clear of centreline, report on-site.\nSTALKER 2, SHEPHERD, on-site Taxiway BRAVO edge, lighting repair in progress, estimate one-five minutes.\nSHEPHERD, STALKER 2, advise when complete and ready to vacate.\nSTALKER 2, SHEPHERD, work complete, vacating, will report clear.\nSTALKER 2, SHEPHERD, clear of manoeuvring area.",
+      "Scenario 3 — Runway repair after aircraft incident (remove debris / restore surface)\nObjectives: Close runway, coordinate salvage + repairs, reopen when safe",
+      "SPARTAN, SHEPHERD, runway incident resolved, request STALKER entry for runway repair and inspection, maintain runway closure until declared serviceable.\nSHEPHERD, SPARTAN, runway remains closed, STALKER will be routed and controlled, advise required work zones.\nSTALKER 3, SHEPHERD, request clearance to enter Runway ZERO TWO via Taxiway ALPHA for surface inspection and repair tasks.\nSHEPHERD, STALKER 3, cleared to enter Runway ZERO TWO via Taxiway ALPHA, proceed to midpoint, report on-scene and keep movement controlled.\nTOWING PARTY, SPARTAN, salvage reposition complete, runway debris lane available for STALKER work.\nSTALKER 3, SPARTAN, on-scene Runway ZERO TWO midpoint, inspection ongoing, repairs commencing, will advise completion.\nSTALKER 3, SHEPHERD, repairs complete, runway surface checked, request runway reopening on your confirmation.\nSHEPHERD, SPARTAN, STALKER reports runway serviceable, confirm reopen authority.\nSPARTAN, SHEPHERD, reopen approved, continue monitoring and log completion.\nSHEPHERD, ALL STATIONS, Runway ZERO TWO reopened, normal operations resumed.",
+      "Scenario 4 — Earthquake / structural damage impacts airfield operations\nObjectives: Safety cordon, damage assessment, suspend operations, staged recovery",
+      "STALKER 4, SPARTAN, structural damage reported near Apron WEST and taxi route, request immediate shutdown of affected areas for assessment.\nSPARTAN, SHEPHERD, suspend movements near Apron WEST and adjacent taxi routes, establish safety cordon with LOGIC.\nSHEPHERD, SPARTAN, suspension active for Apron WEST sector, advise when restrictions can be adjusted.\nLOGIC 2, SPARTAN, cordon established, access restricted, crowd moved back.\nSTALKER 4, SPARTAN, assessment ongoing, multiple defects identified, repairs required, estimate to follow.\nSPARTAN, SHEPHERD, maintain suspension until STALKER declares safe, prepare alternate routing if available.",
+      "Scenario 5 — Person on airfield with aircraft approaching (immediate hazard)\nObjectives: Clear person, secure area, prevent conflict, confirm all clear",
+      "STALKER 5, SHEPHERD, unauthorized person sighted on airfield near Taxiway CHARLIE boundary, request immediate security response and temporary restriction.\nSHEPHERD, STALKER 5, restriction active at Taxiway CHARLIE boundary segment, LOGIC responding, maintain visual and report person movement.\nLOGIC 3, SHEPHERD, responding to location now, will intercept and escort off airfield.\nSAFETY VEHICLE 1, SHEPHERD, available to support cordon and keep routes clear, advise tasking.\nSHEPHERD, SAFETY VEHICLE 1, proceed to Service Road adjacent Taxiway CHARLIE, establish visual cordon, remain clear of manoeuvring area, report established.\nLOGIC 3, SHEPHERD, person removed from airfield, area swept, request lift restriction.\nSHEPHERD, LOGIC 3, restriction lifted, normal movement resumed.\nSTALKER 5, SHEPHERD, airfield clear from my position."
+    ]
+  }
+}
