@@ -1,17 +1,6 @@
-import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import type { ScenarioV2, ScenarioTreeNode, ScenariosV2Data, Role } from './types';
 
-// Get __dirname equivalent in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Read JSON from same directory as this file
-const jsonPath = join(__dirname, 'scenarios_v2.json');
-const scenariosV2Data = JSON.parse(readFileSync(jsonPath, 'utf-8'));
-const data = scenariosV2Data as ScenariosV2Data;
-
+// Roles are static - no JSON loading needed
 const roles: Role[] = [
   { callsign: 'REDCROSS 1', name: 'Medical Response Vehicle 1', description: 'Primary medical responder', series: ['REDCROSS'] },
   { callsign: 'REDCROSS 2', name: 'Medical Response Vehicle 2', description: 'Secondary medical responder', series: ['REDCROSS'] },
@@ -22,6 +11,16 @@ const roles: Role[] = [
   { callsign: 'TENDER 1', name: 'Fuel/Water Tender 1', description: 'Fuel or water supply', series: ['REDCROSS', 'BLUECROSS', 'LOGIC'] },
   { callsign: 'SPARTAN 1', name: 'Command Post Officer', description: 'Command coordination', series: ['REDCROSS', 'BLUECROSS', 'LOGIC', 'STALKER'] },
 ];
+
+// Lazy load scenarios data only when needed
+let _data: ScenariosV2Data | null = null;
+function getData(): ScenariosV2Data {
+  if (!_data) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    _data = require('./scenarios_v2.json') as ScenariosV2Data;
+  }
+  return _data;
+}
 
 export interface NodeWithPlayerTurn extends ScenarioTreeNode {
   isPlayerTurn: boolean;
@@ -34,14 +33,15 @@ export interface ScenarioWithPlayerTurns extends ScenarioV2 {
 }
 
 export function getAllScenarios(): ScenarioV2[] {
-  return data.scenarios;
+  return getData().scenarios;
 }
 
 export function getScenarioById(id: string | number): ScenarioV2 | undefined {
+  const scenarios = getData().scenarios;
   if (typeof id === 'number') {
-    return data.scenarios.find(s => s.id === id);
+    return scenarios.find(s => s.id === id);
   }
-  return data.scenarios.find(s => s.scenario_id === id || s.id === parseInt(id));
+  return scenarios.find(s => s.scenario_id === id || s.id === parseInt(id));
 }
 
 export function getScenariosForRole(callsign: string): ScenarioV2[] {
@@ -101,6 +101,7 @@ export function getRoleByCallsign(callsign: string): Role | undefined {
 }
 
 export function getMetadata() {
+  const data = getData();
   const nodeCount = data.scenarios.reduce((sum, s) => sum + s.nodes.length, 0);
   return {
     version: data.version,
