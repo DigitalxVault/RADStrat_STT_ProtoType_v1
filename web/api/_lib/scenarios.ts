@@ -45,7 +45,7 @@ export function getScenarioById(id: string | number): ScenarioV2 | undefined {
 }
 
 export function getScenariosForRole(callsign: string): ScenarioV2[] {
-  return data.scenarios.filter(scenario =>
+  return getData().scenarios.filter(scenario =>
     scenario.nodes.some(
       node => node.source_callsign === callsign || node.destination_callsign === callsign
     )
