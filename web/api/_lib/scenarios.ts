@@ -1,6 +1,7 @@
-import scenariosV2Data from './scenarios_v2.json';
 import type { ScenarioV2, ScenarioTreeNode, ScenariosV2Data, Role } from './types';
 
+// Use require() for JSON - ESM imports don't work reliably in Vercel serverless
+const scenariosV2Data = require('./scenarios_v2.json');
 const data = scenariosV2Data as ScenariosV2Data;
 
 const roles: Role[] = [
