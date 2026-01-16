@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "description": "RADStrat STT Prototype Frontend",
   "type": "module",
-  "engines": {
-    "node": "18.x"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
