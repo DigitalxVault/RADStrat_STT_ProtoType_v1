@@ -1,7 +1,10 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import type { ScenarioV2, ScenarioTreeNode, ScenariosV2Data, Role } from './types';
 
-// Use require() for JSON - ESM imports don't work reliably in Vercel serverless
-const scenariosV2Data = require('./scenarios_v2.json');
+// Read JSON using fs - path relative to project root in Vercel
+const jsonPath = join(process.cwd(), 'api', '_lib', 'scenarios_v2.json');
+const scenariosV2Data = JSON.parse(readFileSync(jsonPath, 'utf-8'));
 const data = scenariosV2Data as ScenariosV2Data;
 
 const roles: Role[] = [
