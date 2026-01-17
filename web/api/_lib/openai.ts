@@ -90,3 +90,44 @@ export async function getLLMFeedback(
     },
   };
 }
+
+export async function getLLMScoring(
+  systemPrompt: string,
+  userPrompt: string,
+  model: ScoringModel
+): Promise<{ response: string; tokensUsed: { input: number; output: number } }> {
+  if (model === 'grok-4.1-fast') {
+    throw new Error('Use Grok client for grok models');
+  }
+
+  const client = getOpenAIClient();
+
+  const modelMap: Record<string, string> = {
+    'gpt-4o': 'gpt-4o',
+    'gpt-4o-mini': 'gpt-4o-mini',
+  };
+
+  const completion = await client.chat.completions.create({
+    model: modelMap[model],
+    messages: [
+      {
+        role: 'system',
+        content: systemPrompt,
+      },
+      {
+        role: 'user',
+        content: userPrompt,
+      },
+    ],
+    temperature: 0.3,
+    response_format: { type: 'json_object' },
+  });
+
+  return {
+    response: completion.choices[0]?.message?.content || '',
+    tokensUsed: {
+      input: completion.usage?.prompt_tokens || 0,
+      output: completion.usage?.completion_tokens || 0,
+    },
+  };
+}

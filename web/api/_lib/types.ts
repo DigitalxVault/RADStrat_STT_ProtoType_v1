@@ -52,6 +52,7 @@ export interface ScoringParameters {
   fillerPenalty: number;
   maxAllowedFillers: number;
   pauseTolerance: number;
+  customScoringPrompt?: string;
 }
 
 export interface EvaluateResponse {
