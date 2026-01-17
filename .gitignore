@@ -26,3 +26,8 @@ npm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# Claude Code (local config)
+.claude/
+.playwright-mcp/
+AGENTS.md
