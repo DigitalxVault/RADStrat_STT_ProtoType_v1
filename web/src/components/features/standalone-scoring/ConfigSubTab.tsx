@@ -2,13 +2,13 @@
  * Configuration Sub-Tab
  *
  * Manages:
- * - API Key display
+ * - API Key display (masked, from server)
  * - Scoring parameters
  * - Custom prompt configuration
  * - Manual test scoring
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   useUnityConfig,
   useUnityScoringActions,
@@ -24,6 +24,12 @@ const DIFFICULTY_OPTIONS: { value: DifficultyLevel; label: string }[] = [
   { value: 'hard', label: 'Hard' },
 ];
 
+interface ApiKeyInfo {
+  masked: string;
+  isConfigured: boolean;
+  envVar: string;
+}
+
 export function ConfigSubTab() {
   const config = useUnityConfig();
   const isProcessing = useUnityIsProcessing();
@@ -38,21 +44,32 @@ export function ConfigSubTab() {
     addRequestLog,
   } = useUnityScoringActions();
 
+  // API Key state (fetched from server)
+  const [apiKeyInfo, setApiKeyInfo] = useState<ApiKeyInfo | null>(null);
+  const [apiKeyLoading, setApiKeyLoading] = useState(true);
+
   // Manual test state
   const [testExpected, setTestExpected] = useState('');
   const [testTranscript, setTestTranscript] = useState('');
   const [testDifficulty, setTestDifficulty] = useState<DifficultyLevel>('medium');
-  const [showApiKey, setShowApiKey] = useState(false);
 
-  // Copy API key to clipboard
-  const copyApiKey = async () => {
-    try {
-      await navigator.clipboard.writeText(config.apiKey);
-      alert('API key copied to clipboard!');
-    } catch {
-      alert('Failed to copy. Please copy manually.');
+  // Fetch API key info from server
+  useEffect(() => {
+    async function fetchApiKeyInfo() {
+      try {
+        const res = await fetch('/api/unity/config');
+        const data = await res.json();
+        if (data.success) {
+          setApiKeyInfo(data.apiKey);
+        }
+      } catch (err) {
+        console.error('Failed to fetch API key info:', err);
+      } finally {
+        setApiKeyLoading(false);
+      }
     }
-  };
+    fetchApiKeyInfo();
+  }, []);
 
   // Run manual test
   const runManualTest = async () => {
@@ -102,26 +119,30 @@ export function ConfigSubTab() {
         </p>
 
         <div className="api-key-display">
-          <input
-            type={showApiKey ? 'text' : 'password'}
-            value={config.apiKey}
-            readOnly
-            className="input mono"
-          />
-          <button
-            className="btn btn-sm"
-            onClick={() => setShowApiKey(!showApiKey)}
-          >
-            {showApiKey ? 'Hide' : 'Show'}
-          </button>
-          <button className="btn btn-sm" onClick={copyApiKey}>
-            Copy
-          </button>
+          <div className="api-key-value">
+            {apiKeyLoading ? (
+              <span className="text-muted">Loading...</span>
+            ) : apiKeyInfo ? (
+              <>
+                <code className="api-key-masked">{apiKeyInfo.masked}</code>
+                <span className={`status-badge ${apiKeyInfo.isConfigured ? 'configured' : 'not-configured'}`}>
+                  {apiKeyInfo.isConfigured ? 'Configured' : 'Using Default'}
+                </span>
+              </>
+            ) : (
+              <span className="text-muted">Failed to load</span>
+            )}
+          </div>
         </div>
 
         <p className="text-muted small mt-sm">
-          Set via environment variable: <code>UNITY_SCORING_API_KEY</code>
+          Set via environment variable: <code>{apiKeyInfo?.envVar || 'UNITY_SCORING_API_KEY'}</code>
         </p>
+        {apiKeyInfo && !apiKeyInfo.isConfigured && (
+          <p className="text-warning small mt-xs">
+            Warning: Using default key. Set a secure key in Vercel environment variables for production.
+          </p>
+        )}
       </section>
 
       {/* Scoring Parameters */}
@@ -266,8 +287,45 @@ export function ConfigSubTab() {
           gap: 0.5rem;
         }
 
-        .api-key-display .input {
+        .api-key-value {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.75rem 1rem;
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid var(--border-color, #333);
+          border-radius: 4px;
           flex: 1;
+        }
+
+        .api-key-masked {
+          font-family: monospace;
+          font-size: 1rem;
+          background: transparent;
+          padding: 0;
+          letter-spacing: 0.05em;
+        }
+
+        .status-badge {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          font-weight: 600;
+          text-transform: uppercase;
+        }
+
+        .status-badge.configured {
+          background: rgba(74, 222, 128, 0.2);
+          color: #4ade80;
+        }
+
+        .status-badge.not-configured {
+          background: rgba(251, 191, 36, 0.2);
+          color: #fbbf24;
+        }
+
+        .text-warning {
+          color: #fbbf24;
         }
 
         .param-grid {
