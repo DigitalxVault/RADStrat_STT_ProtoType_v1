@@ -31,3 +31,4 @@ npm-debug.log*
 .claude/
 .playwright-mcp/
 AGENTS.md
+CLAUDE.md

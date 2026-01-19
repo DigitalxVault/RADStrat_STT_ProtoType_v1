@@ -3,6 +3,7 @@ import { TabId } from './types';
 import { STTTestTab } from './components/features/stt-test/STTTestTab';
 import { ParametersTab } from './components/features/parameters/ParametersTab';
 import { LogsTab } from './components/features/logs/LogsTab';
+import { StandaloneScoringTab } from './components/features/standalone-scoring/StandaloneScoringTab';
 import { useLocalStorage, useLogs } from './hooks/useLocalStorage';
 import {
   STTModel,
@@ -47,6 +48,7 @@ function App() {
     { id: 'stt-test', label: 'STT Test' },
     { id: 'parameters', label: 'Parameters' },
     { id: 'logs', label: 'Logs' },
+    { id: 'standalone-scoring', label: 'STANDALONE SCORING (Unity)' },
   ];
 
   return (
@@ -96,6 +98,10 @@ function App() {
 
           <div style={{ display: activeTab === 'logs' ? 'block' : 'none' }}>
             <LogsTab logsManager={logsManager} />
+          </div>
+
+          <div style={{ display: activeTab === 'standalone-scoring' ? 'block' : 'none' }}>
+            <StandaloneScoringTab />
           </div>
         </div>
 

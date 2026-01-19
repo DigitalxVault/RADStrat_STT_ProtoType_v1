@@ -219,4 +219,4 @@ export interface AppState {
 }
 
 // Tab Types
-export type TabId = 'stt-test' | 'parameters' | 'logs';
+export type TabId = 'stt-test' | 'parameters' | 'logs' | 'standalone-scoring';
