@@ -29,7 +29,6 @@ export function ConfigSubTab() {
   const isProcessing = useUnityIsProcessing();
   const lastError = useUnityLastError();
   const {
-    setApiKey,
     setCustomPrompt,
     setFillerPenalty,
     setMaxFillers,
@@ -106,9 +105,8 @@ export function ConfigSubTab() {
           <input
             type={showApiKey ? 'text' : 'password'}
             value={config.apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
+            readOnly
             className="input mono"
-            placeholder="Enter API key..."
           />
           <button
             className="btn btn-sm"
