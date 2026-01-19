@@ -31,7 +31,7 @@ export async function transcribeAudio(
   const extension = MIME_TO_EXTENSION[mimeType] || 'webm';
   const filename = `audio.${extension}`;
 
-  const file = new File([audioBuffer], filename, { type: mimeType });
+  const file = new File([new Uint8Array(audioBuffer)], filename, { type: mimeType });
 
   const modelMap: Record<STTModel, string> = {
     'whisper': 'whisper-1',

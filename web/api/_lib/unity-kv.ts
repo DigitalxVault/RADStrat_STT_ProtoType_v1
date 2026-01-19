@@ -127,7 +127,7 @@ export async function deleteRequestLog(id: string): Promise<boolean> {
 
   try {
     const logs = await kv.get<UnityLogEntry[]>(LOGS_KEY) || [];
-    const filteredLogs = logs.filter(log => log.id !== id);
+    const filteredLogs = logs.filter((log: UnityLogEntry) => log.id !== id);
 
     if (filteredLogs.length === logs.length) {
       return false; // Log not found
