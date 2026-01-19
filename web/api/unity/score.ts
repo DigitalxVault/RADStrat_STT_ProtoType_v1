@@ -13,6 +13,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { config } from '../_lib/config';
 import { scoreTransmission, type UnityScoringResponse } from '../_lib/unity-scoring';
 import type { DifficultyLevel } from '../_lib/types';
+import { saveRequestLog, type UnityLogEntry } from '../_lib/unity-kv';
 
 interface UnityScoreRequest {
   transcript: string;
@@ -112,6 +113,20 @@ export default async function handler(
       totalCost: result.summary.totalCost,
       highestScore: result.summary.highestScore,
       bestValue: result.summary.bestValue,
+    });
+
+    // Log to KV for Dashboard visibility (non-blocking)
+    const logEntry: UnityLogEntry = {
+      id: `req_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      timestamp: result.timestamp,
+      input: result.input,
+      results: result.modelResults,
+      summary: result.summary,
+    };
+
+    // Fire and forget - don't block the response
+    saveRequestLog(logEntry).catch((err) => {
+      console.error('[Unity Score API] KV logging failed:', err);
     });
 
     res.status(200).json(result);

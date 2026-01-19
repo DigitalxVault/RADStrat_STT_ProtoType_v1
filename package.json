@@ -21,5 +21,8 @@
   ],
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
   }
 }

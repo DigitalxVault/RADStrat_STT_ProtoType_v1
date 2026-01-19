@@ -4,36 +4,179 @@
  * Displays:
  * - Model comparison statistics
  * - Request history log with multi-model scores
+ *
+ * Fetches data from server (Vercel KV) to show all Unity API requests.
  */
 
-import { useState } from 'react';
-import {
-  useUnityRequestLogs,
-  useUnityScoringActions,
-  type UnityRequestLog,
-} from '../../../stores/unityScoringStore';
+import { useState, useEffect, useCallback } from 'react';
 import { formatCost, formatLatency } from '../../../lib/unity-api';
 import type { ScoringModel } from '../../../types';
 
 const MODELS: ScoringModel[] = ['gpt-4o', 'gpt-4o-mini', 'grok-4.1-fast'];
 
-export function DashboardSubTab() {
-  const requestLogs = useUnityRequestLogs();
-  const { clearRequestLogs, deleteRequestLog, getAggregateStats } = useUnityScoringActions();
-  const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
+// Types matching server response
+interface UnityScoreResult {
+  scores: {
+    structure: { score: number; details: string };
+    accuracy: { score: number; details: string };
+    fluency: { score: number; fillers: string[]; details: string };
+  };
+  total: number;
+  feedback: string;
+  cost: number;
+  latency_ms: number;
+}
 
-  const stats = getAggregateStats();
+interface UnityLogEntry {
+  id: string;
+  timestamp: string;
+  input: {
+    transcript: string;
+    expected: string;
+    difficulty: string;
+  };
+  results: {
+    'gpt-4o': UnityScoreResult;
+    'gpt-4o-mini': UnityScoreResult;
+    'grok-4.1-fast': UnityScoreResult;
+  };
+  summary: {
+    totalCost: number;
+    bestValue: string;
+    highestScore: string;
+  };
+}
+
+interface AggregateStats {
+  totalRequests: number;
+  totalCost: number;
+  byModel: {
+    [model: string]: {
+      averageScore: number;
+      totalCost: number;
+    };
+  };
+}
+
+export function DashboardSubTab() {
+  const [logs, setLogs] = useState<UnityLogEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Fetch logs from server
+  const fetchLogs = useCallback(async (showRefreshing = false) => {
+    if (showRefreshing) setRefreshing(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/unity/logs');
+      const data = await res.json();
+
+      if (data.success) {
+        setLogs(data.logs || []);
+      } else {
+        setError(data.message || 'Failed to fetch logs');
+        setLogs([]);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch logs');
+      setLogs([]);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Initial load
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
+
+  // Calculate stats from logs
+  const calculateStats = (): AggregateStats => {
+    const stats: AggregateStats = {
+      totalRequests: logs.length,
+      totalCost: 0,
+      byModel: {},
+    };
+
+    // Initialize model stats
+    for (const model of MODELS) {
+      stats.byModel[model] = {
+        averageScore: 0,
+        totalCost: 0,
+      };
+    }
+
+    if (logs.length === 0) return stats;
+
+    for (const log of logs) {
+      stats.totalCost += log.summary.totalCost;
+
+      for (const model of MODELS) {
+        const result = log.results[model];
+        if (result) {
+          stats.byModel[model].totalCost += result.cost;
+          stats.byModel[model].averageScore += result.total;
+        }
+      }
+    }
+
+    // Calculate averages
+    for (const model of MODELS) {
+      if (logs.length > 0) {
+        stats.byModel[model].averageScore /= logs.length;
+      }
+    }
+
+    return stats;
+  };
+
+  const stats = calculateStats();
+
+  // Delete a single log
+  const handleDeleteLog = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const res = await fetch(`/api/unity/logs?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success) {
+        setLogs((prev) => prev.filter((log) => log.id !== id));
+      }
+    } catch (err) {
+      console.error('Failed to delete log:', err);
+    }
+  };
+
+  // Clear all logs
+  const handleClearLogs = async () => {
+    if (!confirm('Are you sure you want to clear all logs?')) return;
+
+    try {
+      const res = await fetch('/api/unity/logs', { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setLogs([]);
+      }
+    } catch (err) {
+      console.error('Failed to clear logs:', err);
+    }
+  };
 
   const formatScore = (score: number) => Math.round(score);
   const formatAvg = (val: number) => val.toFixed(1);
 
-  const getBestScoreModel = (log: UnityRequestLog): ScoringModel => {
+  const getBestScoreModel = (log: UnityLogEntry): ScoringModel => {
     return MODELS.reduce((best, model) =>
       log.results[model].total > log.results[best].total ? model : best
     );
   };
 
-  const getBestValueModel = (log: UnityRequestLog): ScoringModel => {
+  const getBestValueModel = (log: UnityLogEntry): ScoringModel => {
     return MODELS.reduce((best, model) => {
       const bestRatio = log.results[best].total / (log.results[best].cost || 0.0001);
       const modelRatio = log.results[model].total / (log.results[model].cost || 0.0001);
@@ -41,8 +184,28 @@ export function DashboardSubTab() {
     });
   };
 
+  if (loading) {
+    return (
+      <div className="dashboard-subtab">
+        <div className="loading-state">
+          <p className="text-muted">Loading logs...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard-subtab">
+      {/* Error Display */}
+      {error && (
+        <div className="callout callout-warning mb-md">
+          <strong>Note:</strong> {error}
+          <p className="small mt-xs">
+            Make sure Vercel KV is configured in your Vercel dashboard.
+          </p>
+        </div>
+      )}
+
       {/* Stats Summary Cards */}
       <div className="stats-grid mb-lg">
         <div className="stat-card">
@@ -56,11 +219,11 @@ export function DashboardSubTab() {
         {MODELS.map((model) => (
           <div key={model} className="stat-card">
             <div className="stat-value">
-              {formatAvg(stats.byModel[model].averageScore)}
+              {formatAvg(stats.byModel[model]?.averageScore || 0)}
             </div>
             <div className="stat-label">{model} Avg Score</div>
             <div className="stat-detail">
-              {formatCost(stats.byModel[model].totalCost)} total
+              {formatCost(stats.byModel[model]?.totalCost || 0)} total
             </div>
           </div>
         ))}
@@ -70,14 +233,23 @@ export function DashboardSubTab() {
       <div className="log-section">
         <div className="flex justify-between items-center mb-md">
           <h3 style={{ margin: 0 }}>Request History</h3>
-          {requestLogs.length > 0 && (
-            <button className="btn btn-sm" onClick={clearRequestLogs}>
-              Clear All
+          <div className="flex gap-sm">
+            <button
+              className="btn btn-sm"
+              onClick={() => fetchLogs(true)}
+              disabled={refreshing}
+            >
+              {refreshing ? 'Refreshing...' : 'Refresh'}
             </button>
-          )}
+            {logs.length > 0 && (
+              <button className="btn btn-sm" onClick={handleClearLogs}>
+                Clear All
+              </button>
+            )}
+          </div>
         </div>
 
-        {requestLogs.length === 0 ? (
+        {logs.length === 0 ? (
           <div className="empty-state">
             <p className="text-muted">No scoring requests yet.</p>
             <p className="small text-muted">
@@ -99,7 +271,7 @@ export function DashboardSubTab() {
                 </tr>
               </thead>
               <tbody>
-                {requestLogs.map((log) => {
+                {logs.map((log) => {
                   const bestScore = getBestScoreModel(log);
                   const bestValue = getBestValueModel(log);
                   const isExpanded = expandedLogId === log.id;
@@ -137,10 +309,7 @@ export function DashboardSubTab() {
                         <td>
                           <button
                             className="btn btn-sm btn-ghost"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              deleteRequestLog(log.id);
-                            }}
+                            onClick={(e) => handleDeleteLog(log.id, e)}
                           >
                             &times;
                           </button>
@@ -207,6 +376,23 @@ export function DashboardSubTab() {
       <style>{`
         .dashboard-subtab {
           padding-bottom: 2rem;
+        }
+
+        .loading-state {
+          text-align: center;
+          padding: 3rem;
+        }
+
+        .callout {
+          padding: 1rem;
+          border-radius: 6px;
+          border-left: 4px solid;
+        }
+
+        .callout-warning {
+          background: rgba(245, 158, 11, 0.1);
+          border-color: #f59e0b;
+          color: #fbbf24;
         }
 
         .stats-grid {
@@ -399,6 +585,14 @@ export function DashboardSubTab() {
 
         .btn-ghost:hover {
           color: #ef4444;
+        }
+
+        .flex {
+          display: flex;
+        }
+
+        .gap-sm {
+          gap: 0.5rem;
         }
 
         @media (max-width: 768px) {
