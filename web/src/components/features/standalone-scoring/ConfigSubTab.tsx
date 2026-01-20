@@ -15,8 +15,9 @@ import {
   useUnityIsProcessing,
   useUnityLastError,
 } from '../../../stores/unityScoringStore';
-import { scoreUnityTransmission } from '../../../lib/unity-api';
-import type { DifficultyLevel } from '../../../types';
+import { scoreUnityTransmission, formatCost, formatLatency } from '../../../lib/unity-api';
+import type { UnityScoringResponse } from '../../../lib/unity-api';
+import type { DifficultyLevel, ScoringModel } from '../../../types';
 
 const DIFFICULTY_OPTIONS: { value: DifficultyLevel; label: string }[] = [
   { value: 'easy', label: 'Easy' },
@@ -43,7 +44,6 @@ export function ConfigSubTab() {
     resetConfig,
     setProcessing,
     setError,
-    addRequestLog,
   } = useUnityScoringActions();
 
   // API Key state (fetched from server)
@@ -54,6 +54,7 @@ export function ConfigSubTab() {
   const [testExpected, setTestExpected] = useState('');
   const [testTranscript, setTestTranscript] = useState('');
   const [testDifficulty, setTestDifficulty] = useState<DifficultyLevel>('medium');
+  const [testResult, setTestResult] = useState<UnityScoringResponse | null>(null);
 
   // Fetch API key info from server
   useEffect(() => {
@@ -86,6 +87,7 @@ export function ConfigSubTab() {
 
     setProcessing(true);
     setError(null);
+    setTestResult(null);
 
     try {
       const result = await scoreUnityTransmission(
@@ -98,14 +100,19 @@ export function ConfigSubTab() {
         config.apiKey
       );
 
-      addRequestLog(result);
-      setTestExpected('');
-      setTestTranscript('');
+      setTestResult(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Test failed');
     } finally {
       setProcessing(false);
     }
+  };
+
+  // Get score color
+  const getScoreColor = (score: number): string => {
+    if (score >= 90) return '#4ade80';
+    if (score >= 70) return '#fbbf24';
+    return '#ef4444';
   };
 
   return (
@@ -268,6 +275,77 @@ export function ConfigSubTab() {
             {isProcessing ? 'Scoring with all 3 models...' : 'Run Test (All Models)'}
           </button>
         </div>
+
+        {/* Test Results Display */}
+        {testResult && (
+          <div className="test-results mt-lg">
+            <h4>Test Results</h4>
+            <p className="text-muted small mb-md">
+              Scored at {new Date(testResult.timestamp).toLocaleString()} |
+              Total Cost: {formatCost(testResult.summary.totalCost)}
+            </p>
+
+            <div className="model-results-grid">
+              {(['gpt-4o', 'gpt-4o-mini', 'grok-4.1-fast'] as ScoringModel[]).map((model) => {
+                const result = testResult.modelResults[model];
+                const isBestValue = testResult.summary.bestValue === model;
+                const isHighestScore = testResult.summary.highestScore === model;
+
+                return (
+                  <div key={model} className="model-result-card">
+                    <div className="model-header">
+                      <span className="model-name">{model}</span>
+                      <div className="badges">
+                        {isBestValue && <span className="badge badge-value">Best Value</span>}
+                        {isHighestScore && <span className="badge badge-score">Highest</span>}
+                      </div>
+                    </div>
+
+                    <div className="score-display" style={{ color: getScoreColor(result.total) }}>
+                      {result.total.toFixed(1)}
+                    </div>
+
+                    <div className="score-breakdown">
+                      <div className="score-row">
+                        <span>Structure</span>
+                        <span>{result.scores.structure.score}/40</span>
+                      </div>
+                      <div className="score-row">
+                        <span>Accuracy</span>
+                        <span>{result.scores.accuracy.score}/40</span>
+                      </div>
+                      <div className="score-row">
+                        <span>Fluency</span>
+                        <span>{result.scores.fluency.score}/20</span>
+                      </div>
+                    </div>
+
+                    <div className="model-meta">
+                      <span>{formatCost(result.cost)}</span>
+                      <span>{formatLatency(result.latency_ms)}</span>
+                    </div>
+
+                    <div className="feedback-section">
+                      <p className="feedback-text">{result.feedback}</p>
+                      {result.scores.fluency.fillers.length > 0 && (
+                        <p className="fillers-text">
+                          Fillers: {result.scores.fluency.fillers.join(', ')}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <button
+              className="btn btn-sm mt-md"
+              onClick={() => setTestResult(null)}
+            >
+              Clear Results
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Config Styles */}
@@ -419,6 +497,116 @@ export function ConfigSubTab() {
           border-radius: 3px;
           font-family: monospace;
           font-size: 0.875rem;
+        }
+
+        /* Test Results Styles */
+        .test-results {
+          padding-top: 1.5rem;
+          border-top: 1px solid var(--border-color, #333);
+        }
+
+        .test-results h4 {
+          margin: 0 0 0.5rem 0;
+          color: var(--accent-gold, #d4af37);
+        }
+
+        .model-results-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 1rem;
+        }
+
+        .model-result-card {
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid var(--border-color, #333);
+          border-radius: 8px;
+          padding: 1rem;
+        }
+
+        .model-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .model-name {
+          font-weight: 600;
+          font-size: 0.875rem;
+        }
+
+        .badges {
+          display: flex;
+          gap: 0.25rem;
+        }
+
+        .badge {
+          font-size: 0.625rem;
+          padding: 0.125rem 0.375rem;
+          border-radius: 3px;
+          text-transform: uppercase;
+          font-weight: 600;
+        }
+
+        .badge-value {
+          background: rgba(74, 222, 128, 0.2);
+          color: #4ade80;
+        }
+
+        .badge-score {
+          background: rgba(212, 175, 55, 0.2);
+          color: var(--accent-gold, #d4af37);
+        }
+
+        .score-display {
+          font-size: 2rem;
+          font-weight: 700;
+          text-align: center;
+          margin: 0.5rem 0;
+        }
+
+        .score-breakdown {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
+          padding: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .score-row {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.75rem;
+          padding: 0.125rem 0;
+        }
+
+        .model-meta {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.75rem;
+          color: var(--text-muted, #888);
+          margin-bottom: 0.5rem;
+        }
+
+        .feedback-section {
+          font-size: 0.75rem;
+          border-top: 1px solid var(--border-color, #333);
+          padding-top: 0.5rem;
+        }
+
+        .feedback-text {
+          margin: 0;
+          line-height: 1.4;
+          color: var(--text-muted, #aaa);
+        }
+
+        .fillers-text {
+          margin: 0.25rem 0 0 0;
+          color: #fbbf24;
+          font-style: italic;
+        }
+
+        .mt-lg {
+          margin-top: 1.5rem;
         }
       `}</style>
     </div>
