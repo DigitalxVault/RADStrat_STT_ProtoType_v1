@@ -65,6 +65,7 @@ function isKVAvailable(): boolean {
 
 /**
  * Save a request log entry to KV
+ * Uses atomic LPUSH + LTRIM to avoid race conditions
  */
 export async function saveRequestLog(log: UnityLogEntry): Promise<void> {
   if (!isKVAvailable()) {
@@ -73,21 +74,13 @@ export async function saveRequestLog(log: UnityLogEntry): Promise<void> {
   }
 
   try {
-    // Get existing logs
-    const existingLogs = await kv.get<UnityLogEntry[]>(LOGS_KEY) || [];
+    // Atomic prepend - no read-modify-write race condition
+    await kv.lpush(LOGS_KEY, JSON.stringify(log));
 
-    // Add new log at the beginning (most recent first)
-    const updatedLogs = [log, ...existingLogs];
+    // Atomic trim to max logs
+    await kv.ltrim(LOGS_KEY, 0, MAX_LOGS - 1);
 
-    // Trim to max logs
-    if (updatedLogs.length > MAX_LOGS) {
-      updatedLogs.length = MAX_LOGS;
-    }
-
-    // Save back to KV
-    await kv.set(LOGS_KEY, updatedLogs);
-
-    console.log(`[KV] Saved log ${log.id}, total logs: ${updatedLogs.length}`);
+    console.log(`[KV] Saved log ${log.id}`);
   } catch (err) {
     console.error('[KV] Failed to save log:', err);
     throw err;
@@ -96,6 +89,7 @@ export async function saveRequestLog(log: UnityLogEntry): Promise<void> {
 
 /**
  * Fetch request logs from KV
+ * Uses LRANGE for atomic list reading
  */
 export async function getRequestLogs(limit?: number): Promise<UnityLogEntry[]> {
   if (!isKVAvailable()) {
@@ -104,13 +98,13 @@ export async function getRequestLogs(limit?: number): Promise<UnityLogEntry[]> {
   }
 
   try {
-    const logs = await kv.get<UnityLogEntry[]>(LOGS_KEY) || [];
+    const count = limit && limit > 0 ? limit : MAX_LOGS;
+    const rawLogs = await kv.lrange(LOGS_KEY, 0, count - 1);
 
-    if (limit && limit > 0) {
-      return logs.slice(0, limit);
-    }
-
-    return logs;
+    // Parse JSON strings back to objects
+    return rawLogs.map((item: string | UnityLogEntry) =>
+      typeof item === 'string' ? JSON.parse(item) : item
+    );
   } catch (err) {
     console.error('[KV] Failed to fetch logs:', err);
     throw err;
@@ -119,6 +113,7 @@ export async function getRequestLogs(limit?: number): Promise<UnityLogEntry[]> {
 
 /**
  * Delete a specific log entry
+ * Uses LREM for atomic list removal
  */
 export async function deleteRequestLog(id: string): Promise<boolean> {
   if (!isKVAvailable()) {
@@ -126,14 +121,15 @@ export async function deleteRequestLog(id: string): Promise<boolean> {
   }
 
   try {
-    const logs = await kv.get<UnityLogEntry[]>(LOGS_KEY) || [];
-    const filteredLogs = logs.filter((log: UnityLogEntry) => log.id !== id);
+    const logs = await getRequestLogs();
+    const logToDelete = logs.find((log: UnityLogEntry) => log.id === id);
 
-    if (filteredLogs.length === logs.length) {
+    if (!logToDelete) {
       return false; // Log not found
     }
 
-    await kv.set(LOGS_KEY, filteredLogs);
+    // Remove the specific item using lrem
+    await kv.lrem(LOGS_KEY, 1, JSON.stringify(logToDelete));
     console.log(`[KV] Deleted log ${id}`);
     return true;
   } catch (err) {
