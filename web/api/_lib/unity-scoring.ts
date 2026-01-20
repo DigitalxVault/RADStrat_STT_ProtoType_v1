@@ -190,7 +190,8 @@ function buildScoringPrompt(
 ): { system: string; user: string } {
   const settings = DIFFICULTY_SETTINGS[difficulty];
 
-  const system = customPrompt || `You are an expert Radio Telephony (RT) communication evaluator for aviation training.
+  // Base system prompt (always included)
+  let system = `You are an expert Radio Telephony (RT) communication evaluator for aviation training.
 
 Evaluate the user's transmission against the expected transmission.
 
@@ -202,7 +203,18 @@ IMPORTANT SCORING RULES:
 SCORING CRITERIA:
 - STRUCTURE (0-30 points): Correct order of elements (receiver → sender → location/intent)
 - ACCURACY (0-50 points): Word-level match with expected transmission (allow ${Math.round(settings.werThreshold * 100)}% tolerance)
-- FLUENCY (0-20 points): No fillers, hesitations, or self-corrections
+- FLUENCY (0-20 points): No fillers, hesitations, or self-corrections`;
+
+  // Append custom instructions if provided
+  if (customPrompt && customPrompt.trim()) {
+    system += `
+
+ADDITIONAL INSTRUCTIONS:
+${customPrompt.trim()}`;
+  }
+
+  // Always include JSON format requirement at the end
+  system += `
 
 Respond ONLY with valid JSON in this exact format:
 {

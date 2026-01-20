@@ -201,16 +201,16 @@ export function ConfigSubTab() {
         </div>
 
         <div className="param-item mt-md">
-          <label className="label mb-xs">Custom Scoring Prompt (Optional)</label>
+          <label className="label mb-xs">Additional Scoring Instructions (Optional)</label>
           <textarea
             value={config.customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             className="textarea mono"
             rows={5}
-            placeholder="Leave empty to use default RT scoring prompt..."
+            placeholder="e.g., Digits like 42 can be spoken as 'fourty two' or 'four two'. Should not be penalized..."
           />
           <p className="small text-muted mt-xs">
-            Override the default LLM prompt for specialized scoring requirements.
+            Add extra instructions to the default RT scoring prompt. These will be appended under "ADDITIONAL INSTRUCTIONS".
           </p>
         </div>
 
