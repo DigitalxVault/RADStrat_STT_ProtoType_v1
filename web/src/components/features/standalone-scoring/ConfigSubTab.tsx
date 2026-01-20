@@ -25,6 +25,7 @@ const DIFFICULTY_OPTIONS: { value: DifficultyLevel; label: string }[] = [
 ];
 
 interface ApiKeyInfo {
+  value: string;
   masked: string;
   isConfigured: boolean;
   envVar: string;
@@ -35,6 +36,7 @@ export function ConfigSubTab() {
   const isProcessing = useUnityIsProcessing();
   const lastError = useUnityLastError();
   const {
+    setApiKey,
     setCustomPrompt,
     setFillerPenalty,
     setMaxFillers,
@@ -61,6 +63,10 @@ export function ConfigSubTab() {
         const data = await res.json();
         if (data.success) {
           setApiKeyInfo(data.apiKey);
+          // Store the actual key for manual test
+          if (data.apiKey.value) {
+            setApiKey(data.apiKey.value);
+          }
         }
       } catch (err) {
         console.error('Failed to fetch API key info:', err);
@@ -69,7 +75,7 @@ export function ConfigSubTab() {
       }
     }
     fetchApiKeyInfo();
-  }, []);
+  }, [setApiKey]);
 
   // Run manual test
   const runManualTest = async () => {

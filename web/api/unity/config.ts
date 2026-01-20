@@ -33,6 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   return res.status(200).json({
     success: true,
     apiKey: {
+      value: apiKey, // For manual test feature (same-origin only)
       masked: maskApiKey(apiKey),
       isConfigured,
       envVar: 'UNITY_SCORING_API_KEY',
