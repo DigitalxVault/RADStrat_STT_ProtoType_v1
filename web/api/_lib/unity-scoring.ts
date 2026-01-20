@@ -120,6 +120,166 @@ function normalizeText(text: string): string {
 }
 
 // ============================================================================
+// Critical RT Element Extraction (Deterministic Post-Check)
+// ============================================================================
+
+interface CriticalElements {
+  gates: string[];
+  runways: string[];
+  frequencies: string[];
+  altitudes: string[];
+  callsign: string | null;
+}
+
+/**
+ * Normalize number words to digits for comparison
+ * e.g., "forty-two" -> "42", "twenty seven" -> "27"
+ */
+function normalizeNumberString(str: string): string {
+  let result = str.toLowerCase().trim();
+
+  // Convert number words to digits using WORD_TO_NUMBER mapping
+  for (const [word, digit] of Object.entries(WORD_TO_NUMBER)) {
+    result = result.replace(new RegExp(`\\b${word}\\b`, 'gi'), digit);
+  }
+
+  // Handle compound numbers like "forty two" or "forty-two"
+  result = result.replace(/forty[\s-]*(\d)/gi, '4$1');
+  result = result.replace(/thirty[\s-]*(\d)/gi, '3$1');
+  result = result.replace(/twenty[\s-]*(\d)/gi, '2$1');
+  result = result.replace(/\bforty\b/gi, '40');
+  result = result.replace(/\bthirty\b/gi, '30');
+  result = result.replace(/\btwenty\b/gi, '20');
+
+  // Remove spaces and hyphens, keep only alphanumeric
+  return result.replace(/[\s-]+/g, '').toLowerCase();
+}
+
+/**
+ * Extract critical RT elements from text for deterministic comparison
+ */
+function extractCriticalElements(text: string): CriticalElements {
+  const normalized = text.toLowerCase();
+
+  // Gate numbers: "gate 42", "gate forty-two", "gate forty two"
+  const gateMatches = [...normalized.matchAll(/gate\s+([a-z0-9\-\s]+?)(?:\s*,|\s*$|\s+(?:request|for|and))/gi)];
+  const gates = gateMatches.map(m => normalizeNumberString(m[1]));
+
+  // Runway numbers: "runway 27L", "runway two seven left"
+  const runwayMatches = [...normalized.matchAll(/runway\s+([a-z0-9\-\s]+?)(?:\s*,|\s*$|\s+(?:cleared|for|via))/gi)];
+  const runways = runwayMatches.map(m => {
+    let rwy = normalizeNumberString(m[1]);
+    // Normalize left/right/center
+    rwy = rwy.replace(/left/gi, 'l').replace(/right/gi, 'r').replace(/center/gi, 'c');
+    return rwy;
+  });
+
+  // Frequencies: "121.5", "one two one decimal five"
+  const freqMatches = [...normalized.matchAll(/(\d{2,3})[.\s]?(\d{1,3})/g)];
+  const frequencies = freqMatches.map(m => `${m[1]}.${m[2]}`);
+
+  // Altitudes: "FL350", "flight level 350", "3500 feet", "altitude 3500"
+  const altMatches = [
+    ...normalized.matchAll(/(?:fl|flight\s*level)\s*(\d+)/gi),
+    ...normalized.matchAll(/(\d+)\s*(?:feet|ft)/gi),
+    ...normalized.matchAll(/altitude\s+(\d+)/gi),
+  ];
+  const altitudes = altMatches.map(m => m[1]);
+
+  // Callsign: typically at the start (e.g., "Ground", "Tower", "Hotel Nine")
+  const callsignMatch = normalized.match(/^([a-z]+(?:\s+[a-z0-9]+)?)/i);
+  const callsign = callsignMatch ? callsignMatch[1].trim() : null;
+
+  return { gates, runways, frequencies, altitudes, callsign };
+}
+
+interface CriticalPenalty {
+  total: number;
+  details: string[];
+}
+
+/**
+ * Compare critical RT elements and calculate penalty for mismatches
+ * This is the deterministic post-check layer that applies after LLM scoring
+ */
+function calculateCriticalPenalty(
+  expected: string,
+  transcript: string,
+  difficulty: DifficultyLevel
+): CriticalPenalty {
+  const expectedElements = extractCriticalElements(expected);
+  const transcriptElements = extractCriticalElements(transcript);
+
+  const penalties: { type: string; penalty: number }[] = [];
+
+  // Difficulty multipliers for critical errors
+  const multiplier = { easy: 0.8, medium: 1.0, hard: 1.2 }[difficulty];
+
+  // Gate mismatch: -15 points base (safety-critical)
+  if (expectedElements.gates.length > 0 && transcriptElements.gates.length > 0) {
+    const expectedGate = expectedElements.gates[0];
+    const transcriptGate = transcriptElements.gates[0];
+    if (expectedGate !== transcriptGate) {
+      penalties.push({
+        type: `Wrong gate (expected: ${expectedGate}, got: ${transcriptGate})`,
+        penalty: Math.round(15 * multiplier),
+      });
+    }
+  } else if (expectedElements.gates.length > 0 && transcriptElements.gates.length === 0) {
+    penalties.push({
+      type: `Missing gate number (expected: ${expectedElements.gates[0]})`,
+      penalty: Math.round(10 * multiplier),
+    });
+  }
+
+  // Runway mismatch: -20 points base (safety-critical)
+  if (expectedElements.runways.length > 0 && transcriptElements.runways.length > 0) {
+    const expectedRunway = expectedElements.runways[0];
+    const transcriptRunway = transcriptElements.runways[0];
+    if (expectedRunway !== transcriptRunway) {
+      penalties.push({
+        type: `Wrong runway (expected: ${expectedRunway}, got: ${transcriptRunway})`,
+        penalty: Math.round(20 * multiplier),
+      });
+    }
+  } else if (expectedElements.runways.length > 0 && transcriptElements.runways.length === 0) {
+    penalties.push({
+      type: `Missing runway (expected: ${expectedElements.runways[0]})`,
+      penalty: Math.round(15 * multiplier),
+    });
+  }
+
+  // Frequency mismatch: -20 points base (safety-critical)
+  if (expectedElements.frequencies.length > 0 && transcriptElements.frequencies.length > 0) {
+    const expectedFreq = expectedElements.frequencies[0];
+    const transcriptFreq = transcriptElements.frequencies[0];
+    if (expectedFreq !== transcriptFreq) {
+      penalties.push({
+        type: `Wrong frequency (expected: ${expectedFreq}, got: ${transcriptFreq})`,
+        penalty: Math.round(20 * multiplier),
+      });
+    }
+  }
+
+  // Altitude mismatch: -15 points base (safety-critical)
+  if (expectedElements.altitudes.length > 0 && transcriptElements.altitudes.length > 0) {
+    const expectedAlt = expectedElements.altitudes[0];
+    const transcriptAlt = transcriptElements.altitudes[0];
+    if (expectedAlt !== transcriptAlt) {
+      penalties.push({
+        type: `Wrong altitude (expected: ${expectedAlt}, got: ${transcriptAlt})`,
+        penalty: Math.round(15 * multiplier),
+      });
+    }
+  }
+
+  const total = penalties.reduce((sum, p) => sum + p.penalty, 0);
+  const details = penalties.map(p => `${p.type}: -${p.penalty} pts`);
+
+  return { total, details };
+}
+
+// ============================================================================
 // Filler Word Detection
 // ============================================================================
 
@@ -283,9 +443,22 @@ async function scoreWithModel(
 
     const latency_ms = Date.now() - startTime;
 
+    // DETERMINISTIC POST-CHECK: Apply critical element penalties
+    const criticalPenalty = calculateCriticalPenalty(expected, transcript, difficulty);
+
+    // Calculate base scores from LLM
     const structureScore = Math.min(30, Math.max(0, parsed.structure?.score || 0));
-    const accuracyScore = Math.min(50, Math.max(0, parsed.accuracy?.score || 0));
+    const rawAccuracyScore = Math.min(50, Math.max(0, parsed.accuracy?.score || 0));
     const fluencyScore = Math.min(20, Math.max(0, adjustedFluency));
+
+    // Apply critical penalty to accuracy score
+    const accuracyScore = Math.max(0, rawAccuracyScore - criticalPenalty.total);
+
+    // Build accuracy details with critical errors highlighted
+    let accuracyDetails = parsed.accuracy?.details || 'No details provided';
+    if (criticalPenalty.details.length > 0) {
+      accuracyDetails += ` [CRITICAL ERRORS: ${criticalPenalty.details.join('; ')}]`;
+    }
 
     return {
       scores: {
@@ -295,7 +468,7 @@ async function scoreWithModel(
         },
         accuracy: {
           score: accuracyScore,
-          details: parsed.accuracy?.details || 'No details provided',
+          details: accuracyDetails,
         },
         fluency: {
           score: fluencyScore,

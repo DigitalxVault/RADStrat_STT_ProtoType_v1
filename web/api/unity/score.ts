@@ -115,7 +115,7 @@ export default async function handler(
       bestValue: result.summary.bestValue,
     });
 
-    // Log to KV for Dashboard visibility (non-blocking)
+    // Log to KV for Dashboard visibility (awaited for immediate sync)
     const logEntry: UnityLogEntry = {
       id: `req_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
       timestamp: result.timestamp,
@@ -124,12 +124,25 @@ export default async function handler(
       summary: result.summary,
     };
 
-    // Fire and forget - don't block the response
-    saveRequestLog(logEntry).catch((err) => {
+    // Await the save so Dashboard can immediately sync the new entry
+    let logged = false;
+    let kvAvailable = true;
+    try {
+      logged = await saveRequestLog(logEntry);
+      if (!logged) {
+        kvAvailable = false;
+        console.warn('[Unity Score API] KV not configured - log not saved');
+      }
+    } catch (err) {
       console.error('[Unity Score API] KV logging failed:', err);
-    });
+      logged = false;
+    }
 
-    res.status(200).json(result);
+    // Include logging status in response (for debugging)
+    res.status(200).json({
+      ...result,
+      _meta: { logged, kvAvailable },
+    });
   } catch (error) {
     console.error('[Unity Score API] Error:', error);
 

@@ -60,17 +60,21 @@ export interface AggregateStats {
  * Check if KV is available (for local dev fallback)
  */
 function isKVAvailable(): boolean {
-  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+  const hasUrl = !!process.env.KV_REST_API_URL;
+  const hasToken = !!process.env.KV_REST_API_TOKEN;
+  console.log('[KV] Availability check:', { hasUrl, hasToken, available: hasUrl && hasToken });
+  return hasUrl && hasToken;
 }
 
 /**
  * Save a request log entry to KV
  * Uses atomic LPUSH + LTRIM to avoid race conditions
+ * Returns true if saved successfully, false if KV unavailable
  */
-export async function saveRequestLog(log: UnityLogEntry): Promise<void> {
+export async function saveRequestLog(log: UnityLogEntry): Promise<boolean> {
   if (!isKVAvailable()) {
     console.log('[KV] Skipping log save - KV not configured');
-    return;
+    return false; // Return false to indicate save was skipped
   }
 
   try {
@@ -81,6 +85,7 @@ export async function saveRequestLog(log: UnityLogEntry): Promise<void> {
     await kv.ltrim(LOGS_KEY, 0, MAX_LOGS - 1);
 
     console.log(`[KV] Saved log ${log.id}`);
+    return true;
   } catch (err) {
     console.error('[KV] Failed to save log:', err);
     throw err;

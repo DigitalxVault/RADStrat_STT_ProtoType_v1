@@ -15,7 +15,7 @@ import {
   useUnityIsProcessing,
   useUnityLastError,
 } from '../../../stores/unityScoringStore';
-import { scoreUnityTransmission, formatCost, formatLatency } from '../../../lib/unity-api';
+import { formatCost, formatLatency } from '../../../lib/unity-api';
 import type { UnityScoringResponse } from '../../../lib/unity-api';
 import type { DifficultyLevel, ScoringModel } from '../../../types';
 
@@ -44,6 +44,7 @@ export function ConfigSubTab() {
     resetConfig,
     setProcessing,
     setError,
+    syncLogsFromServer,
   } = useUnityScoringActions();
 
   // API Key state (fetched from server)
@@ -55,6 +56,42 @@ export function ConfigSubTab() {
   const [testTranscript, setTestTranscript] = useState('');
   const [testDifficulty, setTestDifficulty] = useState<DifficultyLevel>('medium');
   const [testResult, setTestResult] = useState<UnityScoringResponse | null>(null);
+  const [kvMeta, setKvMeta] = useState<{ logged: boolean; kvAvailable: boolean } | null>(null);
+
+  // KV Status state
+  const [kvStatus, setKvStatus] = useState<{
+    configured: boolean;
+    connected: boolean;
+    logsCount: number;
+    message: string;
+  } | null>(null);
+  const [kvStatusLoading, setKvStatusLoading] = useState(false);
+
+  // Fetch KV status
+  const fetchKvStatus = async () => {
+    setKvStatusLoading(true);
+    try {
+      const res = await fetch('/api/unity/kv-status');
+      const data = await res.json();
+      if (data.success && data.kv) {
+        setKvStatus({
+          configured: data.kv.configured,
+          connected: data.kv.connected,
+          logsCount: data.kv.logsCount,
+          message: data.message,
+        });
+      }
+    } catch (err) {
+      console.error('Failed to fetch KV status:', err);
+    } finally {
+      setKvStatusLoading(false);
+    }
+  };
+
+  // Fetch KV status on mount
+  useEffect(() => {
+    fetchKvStatus();
+  }, []);
 
   // Fetch API key info from server
   useEffect(() => {
@@ -88,19 +125,51 @@ export function ConfigSubTab() {
     setProcessing(true);
     setError(null);
     setTestResult(null);
+    setKvMeta(null);
 
     try {
-      const result = await scoreUnityTransmission(
-        {
+      // Make raw fetch to capture _meta
+      const res = await fetch('/api/unity/score', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': config.apiKey,
+        },
+        body: JSON.stringify({
           transcript: testTranscript,
           expected: testExpected,
           difficulty: testDifficulty,
           customPrompt: config.customPrompt || undefined,
-        },
-        config.apiKey
-      );
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || data.error || 'Scoring failed');
+      }
+
+      // Extract _meta for KV status display
+      if (data._meta) {
+        setKvMeta(data._meta);
+      }
+
+      // Build result object (without _meta for display)
+      const result: UnityScoringResponse = {
+        success: data.success,
+        timestamp: data.timestamp,
+        input: data.input,
+        modelResults: data.modelResults,
+        summary: data.summary,
+      };
 
       setTestResult(result);
+
+      // Sync from server to get the new entry in Dashboard immediately
+      await syncLogsFromServer();
+
+      // Refresh KV status
+      await fetchKvStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Test failed');
     } finally {
@@ -155,6 +224,60 @@ export function ConfigSubTab() {
           <p className="text-warning small mt-xs">
             Warning: Using default key. Set a secure key in Vercel environment variables for production.
           </p>
+        )}
+      </section>
+
+      {/* KV Database Status */}
+      <section className="config-section mb-lg">
+        <h3>Database Status (Vercel KV)</h3>
+        <p className="text-muted small mb-md">
+          Request logs are stored in Vercel KV for the Dashboard.
+        </p>
+
+        <div className="kv-status-display">
+          {kvStatusLoading ? (
+            <span className="text-muted">Checking KV connection...</span>
+          ) : kvStatus ? (
+            <div className="kv-status-content">
+              <div className="kv-status-row">
+                <span>Configured:</span>
+                <span className={kvStatus.configured ? 'text-success' : 'text-error'}>
+                  {kvStatus.configured ? '✅ Yes' : '❌ No'}
+                </span>
+              </div>
+              <div className="kv-status-row">
+                <span>Connected:</span>
+                <span className={kvStatus.connected ? 'text-success' : 'text-error'}>
+                  {kvStatus.connected ? '✅ Yes' : '❌ No'}
+                </span>
+              </div>
+              <div className="kv-status-row">
+                <span>Logs stored:</span>
+                <span>{kvStatus.logsCount}</span>
+              </div>
+              <p className="kv-message small mt-sm">{kvStatus.message}</p>
+            </div>
+          ) : (
+            <span className="text-muted">Failed to check status</span>
+          )}
+
+          <button
+            className="btn btn-sm mt-md"
+            onClick={fetchKvStatus}
+            disabled={kvStatusLoading}
+          >
+            {kvStatusLoading ? 'Checking...' : 'Refresh Status'}
+          </button>
+        </div>
+
+        {kvStatus && !kvStatus.configured && (
+          <div className="callout callout-error mt-md">
+            <strong>KV Not Configured!</strong>
+            <p className="small mt-xs mb-0">
+              Environment variables <code>KV_REST_API_URL</code> and <code>KV_REST_API_TOKEN</code> are missing.
+              Connect a KV database in your Vercel project settings and redeploy.
+            </p>
+          </div>
         )}
       </section>
 
@@ -284,6 +407,19 @@ export function ConfigSubTab() {
               Scored at {new Date(testResult.timestamp).toLocaleString()} |
               Total Cost: {formatCost(testResult.summary.totalCost)}
             </p>
+
+            {/* KV Save Status */}
+            {kvMeta && (
+              <div className={`kv-save-status ${kvMeta.logged ? 'success' : 'error'}`}>
+                {kvMeta.logged ? (
+                  <>✅ Saved to KV database - will appear in Dashboard</>
+                ) : kvMeta.kvAvailable ? (
+                  <>❌ KV save failed - check Vercel function logs</>
+                ) : (
+                  <>⚠️ KV not configured - results NOT saved to Dashboard</>
+                )}
+              </div>
+            )}
 
             <div className="model-results-grid">
               {(['gpt-4o', 'gpt-4o-mini', 'grok-4.1-fast'] as ScoringModel[]).map((model) => {
@@ -607,6 +743,64 @@ export function ConfigSubTab() {
 
         .mt-lg {
           margin-top: 1.5rem;
+        }
+
+        /* KV Status Styles */
+        .kv-status-display {
+          padding: 1rem;
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 6px;
+        }
+
+        .kv-status-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .kv-status-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.25rem 0;
+        }
+
+        .kv-message {
+          color: var(--text-muted, #888);
+          margin: 0;
+        }
+
+        .text-success {
+          color: #4ade80;
+        }
+
+        .text-error {
+          color: #ef4444;
+        }
+
+        .callout-error {
+          background: rgba(239, 68, 68, 0.1);
+          border-color: #ef4444;
+          color: #fca5a5;
+        }
+
+        .kv-save-status {
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          margin-bottom: 1rem;
+        }
+
+        .kv-save-status.success {
+          background: rgba(74, 222, 128, 0.15);
+          border: 1px solid rgba(74, 222, 128, 0.3);
+          color: #4ade80;
+        }
+
+        .kv-save-status.error {
+          background: rgba(251, 191, 36, 0.15);
+          border: 1px solid rgba(251, 191, 36, 0.3);
+          color: #fbbf24;
         }
       `}</style>
     </div>
