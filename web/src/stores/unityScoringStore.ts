@@ -194,10 +194,8 @@ export const useUnityScoringStore = create<UnityScoringStore>()(
         // Server sync - fetch logs from server (for Unity client updates & Dashboard refresh)
         syncLogsFromServer: async () => {
           try {
-            console.log('[UnityScoringStore] Syncing logs from server...');
             const res = await fetch('/api/unity/logs');
             const data = await res.json();
-            console.log('[UnityScoringStore] Server response:', { success: data.success, count: data.count, hasLogs: !!data.logs });
 
             if (data.success && data.logs) {
               // Transform server logs to match our local format
@@ -214,10 +212,7 @@ export const useUnityScoringStore = create<UnityScoringStore>()(
                 results: log.results,
                 summary: log.summary,
               }));
-              console.log('[UnityScoringStore] Setting logs:', logs.length);
               set({ requestLogs: logs });
-            } else if (!data.success) {
-              console.warn('[UnityScoringStore] Server returned error:', data.error, data.message);
             }
           } catch (err) {
             console.error('[UnityScoringStore] Failed to sync logs from server:', err);

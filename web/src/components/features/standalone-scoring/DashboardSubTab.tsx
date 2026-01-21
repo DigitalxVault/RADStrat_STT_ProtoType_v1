@@ -5,16 +5,16 @@
  * - Model comparison statistics
  * - Request history log with multi-model scores
  *
- * Uses centralized Zustand store with server sync and polling for real-time updates.
+ * Uses centralized Zustand store - auto-updates when web UI scores.
+ * Manual refresh button available for Unity client updates.
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { formatCost, formatLatency } from '../../../lib/unity-api';
 import { useUnityRequestLogs, useUnityScoringActions, type UnityRequestLog } from '../../../stores/unityScoringStore';
 import type { ScoringModel } from '../../../types';
 
 const MODELS: ScoringModel[] = ['gpt-4o', 'gpt-4o-mini', 'grok-4.1-fast'];
-const POLLING_INTERVAL = 5000; // 5 seconds polling for Unity client updates
 
 interface AggregateStats {
   totalRequests: number;
@@ -36,7 +36,6 @@ export function DashboardSubTab() {
   const [error, setError] = useState<string | null>(null);
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Sync logs from server with UI feedback
   const handleSync = useCallback(async (showRefreshing = false) => {
@@ -53,31 +52,13 @@ export function DashboardSubTab() {
     }
   }, [syncLogsFromServer]);
 
-  // Initial load + polling for Unity client updates
+  // Initial load only - no polling
+  // Dashboard auto-updates via Zustand when web UI scores
+  // Manual refresh button available for Unity client updates
   useEffect(() => {
-    console.log('[DashboardSubTab] Component mounted, starting sync...');
-
-    // Initial sync
     handleSync();
-
-    // Set up polling every 5 seconds for Unity client updates
-    pollingRef.current = setInterval(() => {
-      console.log('[DashboardSubTab] Polling tick...');
-      syncLogsFromServer();
-    }, POLLING_INTERVAL);
-
-    return () => {
-      console.log('[DashboardSubTab] Component unmounting, clearing interval');
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current);
-      }
-    };
-  }, [handleSync, syncLogsFromServer]);
-
-  // Debug: Log when logs change
-  useEffect(() => {
-    console.log('[DashboardSubTab] Logs updated:', logs.length, 'entries');
-  }, [logs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount
 
   // Calculate stats from logs
   const calculateStats = (): AggregateStats => {
