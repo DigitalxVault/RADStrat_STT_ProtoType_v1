@@ -71,7 +71,7 @@ export function ConfigSubTab() {
   const fetchKvStatus = async () => {
     setKvStatusLoading(true);
     try {
-      const res = await fetch('/api/unity/kv-status');
+      const res = await fetch('/api/unity/logs?action=kv-status');
       const data = await res.json();
       if (data.success && data.kv) {
         setKvStatus({

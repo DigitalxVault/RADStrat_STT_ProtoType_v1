@@ -3,6 +3,7 @@
  *
  * GET /api/unity/logs - Fetch all logs
  * GET /api/unity/logs?action=stats - Get aggregate statistics
+ * GET /api/unity/logs?action=kv-status - Check KV database status
  * DELETE /api/unity/logs - Clear all logs
  * DELETE /api/unity/logs?id=xxx - Delete specific log
  *
@@ -10,6 +11,7 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { kv } from '@vercel/kv';
 import {
   getRequestLogs,
   deleteRequestLog,
@@ -43,6 +45,49 @@ export default async function handler(
         res.status(200).json({
           success: true,
           stats,
+        });
+        return;
+      }
+
+      // KV Status check
+      if (action === 'kv-status') {
+        const envStatus = {
+          KV_REST_API_URL: !!process.env.KV_REST_API_URL,
+          KV_REST_API_TOKEN: !!process.env.KV_REST_API_TOKEN,
+        };
+        const configured = envStatus.KV_REST_API_URL && envStatus.KV_REST_API_TOKEN;
+
+        let connected = false;
+        let pingResult: string | null = null;
+        let error: string | null = null;
+        let logsCount = 0;
+
+        if (configured) {
+          try {
+            const result = await kv.ping();
+            connected = result === 'PONG';
+            pingResult = result;
+            logsCount = await kv.llen('unity:logs');
+          } catch (err) {
+            error = err instanceof Error ? err.message : 'Unknown error';
+          }
+        }
+
+        res.status(200).json({
+          success: true,
+          kv: {
+            configured,
+            connected,
+            pingResult,
+            error,
+            envVars: envStatus,
+            logsCount,
+          },
+          message: connected
+            ? `KV connected successfully. ${logsCount} logs stored.`
+            : configured
+            ? 'KV configured but connection failed: ' + error
+            : 'KV not configured. Missing environment variables.',
         });
         return;
       }
