@@ -1,0 +1,99 @@
+{
+  "version": "3.0.0",
+  "generated": "2026-02-27T00:00:00.000Z",
+  "scenarios": [
+    {
+      "id": 21,
+      "scenario_id": "shepherd_1",
+      "series_id": "SHEPHERD",
+      "title": "Ground Movement Coordination (Whiskey November / Oscar)",
+      "description": "Multi-callsign ground movement coordination through Whiskey November, Oscar, and connecting taxiways",
+      "objectives": [
+        "Controlled ground movement",
+        "Taxiway sequencing",
+        "Route coordination"
+      ],
+      "start_node": 1,
+      "nodes": [
+        {
+          "scenarioId": 21,
+          "id": 1,
+          "message": "SHEPHERD, STALKER, request vacate Whiskey November via Whiskey Charlie 1, entering Oscar, vacate Oscar via Oscar Central Access, tow lane, kilo.",
+          "source": "P",
+          "source_callsign": "STALKER",
+          "source_n": 1,
+          "destination": "ATC",
+          "destination_callsign": "SHEPHERD",
+          "destination_n": 0,
+          "next_pos": 2,
+          "next_neg": null
+        },
+        {
+          "scenarioId": 21,
+          "id": 2,
+          "message": "STALKER, SHEPHERD. Vacate Whiskey November via Whiskey Charlie 1, enter Oscar, vacate Oscar via Oscar Central Access, tow lane, kilo.",
+          "source": "ATC",
+          "source_callsign": "SHEPHERD",
+          "source_n": 0,
+          "destination": "P",
+          "destination_callsign": "STALKER",
+          "destination_n": 1,
+          "next_pos": 3,
+          "next_neg": null
+        },
+        {
+          "scenarioId": 21,
+          "id": 3,
+          "message": "SHEPHERD, REDCROSS 1, request vacate HOBART via Whiskey two, enter OSCAR, vacate OSCAR via OSCAR Central Access, tow lane, kilo.",
+          "source": "P",
+          "source_callsign": "REDCROSS 1",
+          "source_n": 1,
+          "destination": "ATC",
+          "destination_callsign": "SHEPHERD",
+          "destination_n": 0,
+          "next_pos": 4,
+          "next_neg": null
+        },
+        {
+          "scenarioId": 21,
+          "id": 4,
+          "message": "REDCROSS 1, SHEPHERD. Vacate HOBART via Whiskey two, enter OSCAR, vacate OSCAR via OSCAR Central Access, tow lane, kilo.",
+          "source": "ATC",
+          "source_callsign": "SHEPHERD",
+          "source_n": 0,
+          "destination": "P",
+          "destination_callsign": "REDCROSS 1",
+          "destination_n": 1,
+          "next_pos": 5,
+          "next_neg": null
+        },
+        {
+          "scenarioId": 21,
+          "id": 5,
+          "message": "SHEPHERD, SPARTAN, request vacate OSCAR via Whiskey Charlie 1, enter Whiskey November.",
+          "source": "P",
+          "source_callsign": "SPARTAN",
+          "source_n": 1,
+          "destination": "ATC",
+          "destination_callsign": "SHEPHERD",
+          "destination_n": 0,
+          "next_pos": 6,
+          "next_neg": null
+        },
+        {
+          "scenarioId": 21,
+          "id": 6,
+          "message": "SPARTAN, SHEPHERD. Request vacate OSCAR via Whiskey Charlie 1, enter Whiskey November.",
+          "source": "ATC",
+          "source_callsign": "SHEPHERD",
+          "source_n": 0,
+          "destination": "P",
+          "destination_callsign": "SPARTAN",
+          "destination_n": 1,
+          "next_pos": null,
+          "next_neg": null
+        }
+      ]
+    }
+  ]
+}
