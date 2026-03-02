@@ -115,22 +115,6 @@ export function STTTestTab({
   const currentPlayerTurn = playerTurns[currentIndex];
   const totalPlayerTurns = scenario?.playerNodeCount || 0;
 
-  // Get previous context (nodes before current player turn)
-  const getPreviousContext = () => {
-    // Defensive check for v2 format - must have nodes array
-    if (!scenario || !currentPlayerTurn || !scenario.nodes) return [];
-
-    // Find nodes leading up to the current player node
-    const currentNodeIndex = scenario.nodes.findIndex(n => n.id === currentPlayerTurn.id);
-    if (currentNodeIndex <= 0) return [];
-
-    // Get last 3 NPC nodes (non-player turns) before current
-    return scenario.nodes
-      .slice(0, currentNodeIndex)
-      .filter(n => !n.isPlayerTurn)
-      .slice(-3);
-  };
-
   // Handle recording complete - process audio
   const handleRecordingComplete = useCallback(async () => {
     if (!recording.audioBlob || !currentPlayerTurn || !scenario) return;
