@@ -1,4 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import * as fs from 'fs';
+import * as path from 'path';
 
 interface Role {
   callsign: string;
@@ -7,10 +9,11 @@ interface Role {
   series: string[];
 }
 
-// Dynamically extract player roles from scenarios data
+// Dynamically extract player roles from scenarios_v3.json
 function extractPlayerRoles(): Role[] {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const data = require('../_lib/scenarios_v3.json');
+  const jsonPath = path.join(__dirname, '..', '_lib', 'scenarios_v3.json');
+  const raw = fs.readFileSync(jsonPath, 'utf8');
+  const data = JSON.parse(raw);
   const roleMap = new Map<string, Role>();
 
   for (const scenario of data.scenarios) {
@@ -39,6 +42,10 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     res.status(200).json({ roles });
   } catch (err) {
     console.error('Failed to extract roles:', err);
-    res.status(500).json({ error: 'Failed to load roles', detail: String(err) });
+    res.status(500).json({
+      error: 'Failed to load roles',
+      detail: String(err),
+      dirname: __dirname,
+    });
   }
 }
