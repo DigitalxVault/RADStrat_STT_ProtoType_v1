@@ -17,7 +17,7 @@ import {
 import { useRecording } from '../../../hooks/useRecording';
 import { useAudioSession } from '../../../hooks/useAudioSession';
 import { useSTTSessionStore } from '../../../stores/sttSessionStore';
-import { TelemetryStrip } from '../../common/TelemetryStrip';
+
 import { PermissionPrompt } from '../../common/PermissionPrompt';
 
 interface STTTestTabProps {
@@ -313,11 +313,6 @@ export function STTTestTab({
 
   return (
     <div className="stt-test-tab">
-      {/* Telemetry Strip */}
-      <div className="mb-md">
-        <TelemetryStrip mode="minimal" />
-      </div>
-
       {/* Model Selectors */}
       <div className="flex gap-md mb-lg" style={{ flexWrap: 'wrap' }}>
         <div className="flex-1" style={{ minWidth: '200px' }}>
@@ -413,28 +408,10 @@ export function STTTestTab({
             </div>
           </div>
 
-          {/* Previous Context */}
-          {getPreviousContext().length > 0 && (
-            <div className="mb-md">
-              <label className="label">Previous Context</label>
-              <div className="card card-bordered">
-                {getPreviousContext().map((node) => (
-                  <p key={node.id} className="small mb-xs">
-                    <span className="mono" style={{ fontWeight: 600 }}>
-                      {/* RT Format: [Receiver], [Sender] */}
-                      {node.destination_callsign || 'ALL'}, {node.source_callsign}:
-                    </span>{' '}
-                    "{node.message}"
-                  </p>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Current Transmission */}
           {currentPlayerTurn && (
             <div className="mb-md">
-              <label className="label">Your Turn - Expected Response</label>
+              <label className="label">Kindly Read this below text for Scoring.</label>
               <div className="callout">
                 <p className="mono">
                   {/* RT Format: [Receiver], [Sender] - receiver callsign first */}
@@ -541,11 +518,6 @@ export function STTTestTab({
                 </div>
               </div>
 
-              {/* Run Cost */}
-              <div className="mt-md">
-                <TelemetryStrip mode="detailed" />
-              </div>
-
               {/* Feedback */}
               {scoreResult.llmFeedback && (
                 <div className="mt-md">
@@ -575,9 +547,6 @@ export function STTTestTab({
                 <span className="score-label">Average Score</span>
               </div>
 
-              <div className="mb-md">
-                <TelemetryStrip mode="detailed" />
-              </div>
             </>
           )}
 
