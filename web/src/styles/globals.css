@@ -96,6 +96,8 @@ body {
   line-height: 1.5;
   background-color: var(--bg-deep);
   min-height: 100vh;
+  /* PWA: prevent pull-to-refresh interference in standalone mode */
+  overscroll-behavior: none;
 }
 
 /* =============================================
@@ -1094,4 +1096,40 @@ tr:hover td {
 .permission-error {
   color: var(--accent-danger-glow);
   font-size: var(--text-sm);
+}
+
+/* =============================================
+   PWA / iPad Standalone Mode
+   ============================================= */
+
+/* Safe area insets for notch & home indicator */
+.app-container {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Prevent long-press popup on interactive elements */
+@media (display-mode: standalone) {
+  button, a, .btn, .tab, .record-btn {
+    -webkit-touch-callout: none;
+  }
+}
+
+/* Ensure touch targets meet iOS HIG (44x44px minimum) */
+@media (pointer: coarse) {
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .tab {
+    min-height: 44px;
+  }
+
+  .btn-icon {
+    min-width: 48px;
+    min-height: 48px;
+  }
 }
